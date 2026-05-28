@@ -1,6 +1,7 @@
 package com.enricojr.stdlib;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -59,5 +60,15 @@ public class TestStaticArray {
         sai.setLast(1234);
         int res = sai.getLast();
         assertEquals(1234, res);
+    }
+
+    @Test
+    public void testIterator() {
+        StaticArray<Integer> sai = new StaticArray<>(1, 2, 3, 4, 5);
+        for (int i : sai) {
+            System.out.print("i = " + i + ", ");
+        }
+        System.out.println();
+        assertTrue(true);
     }
 }

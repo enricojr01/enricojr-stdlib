@@ -1,9 +1,11 @@
 package com.enricojr.stdlib;
 
+import java.util.Iterator;
 import com.enricojr.stdlib.interfaces.DynamicArrayInterface;
 import com.enricojr.stdlib.interfaces.SequenceInterface;
+import com.enricojr.stdlib.iterators.SequenceIterator;
 
-public class DynamicArray<T> implements SequenceInterface<T>, DynamicArrayInterface<T> {
+public class DynamicArray<T> implements SequenceInterface<T>, DynamicArrayInterface<T>, Iterable<T> {
     // I don't really know how big to make these so I'm just picking a number out of thin air.
     private int chunkSize = 8;
 
@@ -42,6 +44,11 @@ public class DynamicArray<T> implements SequenceInterface<T>, DynamicArrayInterf
 
     public int getInternalArrayLength() {
         return this.internal.len();
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new SequenceIterator<T>(this);
     }
 
     @Override

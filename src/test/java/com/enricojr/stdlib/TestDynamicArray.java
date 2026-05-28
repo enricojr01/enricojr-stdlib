@@ -1,6 +1,7 @@
 package com.enricojr.stdlib;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 public class TestDynamicArray {
@@ -119,5 +120,16 @@ public class TestDynamicArray {
 
         assertEquals(5, res);
         System.out.println("testDynamicArrayGetLast: " + dai);
+    }
+
+    @Test
+    public void testDynamicArrayIterator() {
+        DynamicArray<Integer> dai = new DynamicArray<>(1, 2, 3, 4, 5);
+        System.out.print("testDynamicArrayIterator: ");
+        for (int i : dai) {
+            System.out.print("i = " + i + ", ");
+        }
+        System.out.println();
+        assertTrue(true);
     }
 }

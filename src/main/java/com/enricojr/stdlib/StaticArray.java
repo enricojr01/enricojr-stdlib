@@ -1,8 +1,10 @@
 package com.enricojr.stdlib;
 
+import java.util.Iterator;
 import com.enricojr.stdlib.interfaces.SequenceInterface;
+import com.enricojr.stdlib.iterators.SequenceIterator;
 
-public class StaticArray<T> implements SequenceInterface<T> {
+public class StaticArray<T> implements SequenceInterface<T>, Iterable<T> {
     private T[] internal;
 
     public StaticArray(T... args) {
@@ -15,6 +17,11 @@ public class StaticArray<T> implements SequenceInterface<T> {
 
     public StaticArray(int length) {
         this.internal = (T[]) new Object[length];
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new SequenceIterator<T>(this);
     }
 
     @Override
