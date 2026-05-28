@@ -15,8 +15,8 @@ them being where the "order" arises from.
 The order of items in a sequence corresponds to the order in which they appear in the sequence, 
 i.e. it is extrinsic to the item.
 
-The order in a set is derived from some property of the item, called its `key`, i.e. order is 
-intrinsic to the item. Sometimes the item itself IS the key. 
+The order of items in a set is derived from some property of the item, called its `key`, i.e. order 
+is intrinsic to the item. Sometimes the item itself IS the key. 
 
 ## Interface vs Data Structure
 An interface describes a set of operations on data that should be performed, whereas a data 
@@ -70,7 +70,7 @@ public interface SequenceInterface<T> {
     // returns the item at position x in the sequence.
     T getAt(int x);
 
-    // places the item of type T at position x in the sequence, _overwriting its contents_
+    // places the item of type T at position x in the sequence, _overwriting its contents_.
     void setAt(int x, T item);
 
     // convenience method - wraps a call to getAt(0)
@@ -97,31 +97,45 @@ stand in for that already, so `build()` has been excluded from the interface def
 `iterable()` will be provided by implementing Java's Iterator interface, and custom Iterators where 
 appropriate.
 
-The methods are annotated below for documentation purposes.
-
 
 ## DynamicArrayInterface
-An companion to the SequenceInterface that describes behavior required for Dynamic Arrays (ones 
-that resize in response to inserts / deletes).
+An extension to the SequenceInterface that adds additional functions commonly found on Dynamic 
+Arrays.
 
 ```java
 public interface DynamicArrayInterface<T> {
+    // Inserts item into sequence[idx], pushing elements forward by one to make room for it. 
     void insertAt(int idx, T item);
+
+    // Deletes item at sequence[idx], moving remaining elements backwards by one afterwards.
     void deleteAt(int idx);
+
+    // Inserts item into sequence[0], pushing elmeents forward to make room for it.
     void insertFirst(T item);
+
+    // Inserts item into sequence[sequence.length].
     void insertLast(T item);
+
+    // Deletes item at sequence[0], moving remaining elements backwards by one afterwards.
     void deleteFirst();
+
+    // Deletes item at sequence[sequence.length].
     void deleteLast();
 }
 ```
 
-The difference between setAt() on StaticArray and insertAt() here is that setAt(x, item) will 
-_overwrite_ `sequence[x]` with item, whereas insertAt(x, item) will move items from sequence[x] 
-onwards one position forward before placing item at sequence[x].
+The defining feature of a dynamic array is that it can automatically grow and shrink throughout its 
+lifetime, ideally making for fast `insert()` and `delete()` operations.
 
-In a similar fashion, deleteAt(x) / deleteFirst(x) / deleteLast(x) will shift items one position 
-backwards, thereby erasing the item at `sequence[x]`.
+An important semantic about dynamic arrays is that items are _added_ to the DynamicArray, but 
+_replaced_ in StaticArray. This means that items added to `sequence[x]` will shift the items from 
+that position forwards (to the right) by one place. Likewise, deleting an item at `sequence[x]` 
+should shift remaining elements backwards (to the left) by one place, to close the gap.
 
+Depending on the backing store (linked list vs static array), this inserts / deletes can be as fast 
+as O(1).
+
+# TODO: MOVE THIS SECTION TO THE IMPLEMENTATION DOCS, NOT THE INTERFACE
 All insert and delete methods will trigger a resize of the array when necessary, according to the 
 following criteria:
 
@@ -137,3 +151,39 @@ DynamicArrayInterface, calling the `setAt()` method will throw an UnsupportedOpe
 because I've deemed it safer to use the `insertAt()` method instead, rather than duplicating the
 resize logic in both functions, or cook up a way for one to call the other and vice versa. So the 
 `setAt()` method is implemented simply to conform to the interface but is otherwise nonfunctional.
+
+# SetInterface
+Describes the operations needed to implement Set functionality. Sets in the context of this scenario
+are centered around search and sorting operations, and ideally should perform those operations 
+quickly. Depending on implementation `find()` can be as fast as O(1) time.
+
+```java
+public interface SetInterface<T extends Comparable<T>> {
+    // returns the number of items in the set
+    int len();
+
+    // returns an item from set matching the key of item passed in.
+    T find(T item);
+
+    // inserts item into set.
+    void insert(T item);
+
+    // removes item with matching key from set
+    T delete(T item);
+
+    // returns from the set the item with the lowest key value.
+    T findMin();
+
+    // returns from the set the item with the highest key value.
+    T findMax();
+
+    // returns from the set the item with the next highest key value.
+    T findNext(T item);
+
+    // returns from the set the item with the next lowest key value.
+    T findPrev(T item);
+
+    // sorts the items by their key in ascending order
+    void sort();
+}
+```
