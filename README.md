@@ -58,7 +58,8 @@ the data.
 
 Theta(n^c) - "Polynomial", i.e the runtime of an algorithm increases by n ^ c yada yada.
 
-# SequenceInterface
+# INTERFACES
+## SequenceInterface
 A Java interface representing the set of operations that a Sequence is meant to be able to perform.
 
 ```java
@@ -99,7 +100,7 @@ appropriate.
 The methods are annotated below for documentation purposes.
 
 
-# DynamicArrayInterface
+## DynamicArrayInterface
 An companion to the SequenceInterface that describes behavior required for Dynamic Arrays (ones 
 that resize in response to inserts / deletes).
 
