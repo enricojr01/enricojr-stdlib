@@ -7,6 +7,7 @@ import com.enricojr.stdlib.LinkedListNode;
 public class LinkedListIterator<T> implements Iterator<T> {
     private LinkedList<T> internal;
     private LinkedListNode<T> current;
+    private int counter = 0 ;
 
     public LinkedListIterator(LinkedList<T> list) {
         this.internal = list;
@@ -15,7 +16,8 @@ public class LinkedListIterator<T> implements Iterator<T> {
 
     @Override
     public boolean hasNext() {
-        if (current.getNext() != null) {
+        // I have a feeling this will come back to bite me. 
+        if (this.counter != this.internal.len()) {
             return true;
         } else {
             return false;
@@ -25,7 +27,9 @@ public class LinkedListIterator<T> implements Iterator<T> {
     @Override
     public T next() {
         T item = this.current.getItem();
+        System.out.println("Yielding item: " + item);
         this.current = current.getNext();
+        this.counter += 1;
         return item;
     }
 

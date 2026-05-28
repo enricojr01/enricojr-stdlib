@@ -40,4 +40,13 @@ public class LinkedListNode<T> {
     public void setItem(T item) {
         this.item = item;
     }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("LinkedListNode(");
+        sb.append(item.toString());
+        sb.append(")");
+        return sb.toString();
+
+    }
 }

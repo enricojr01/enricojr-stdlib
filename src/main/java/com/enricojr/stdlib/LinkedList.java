@@ -13,34 +13,25 @@ public class LinkedList<T> implements SequenceInterface<T>, DynamicArrayInterfac
     public LinkedList() {}
 
     public LinkedList(T... args) {
-        // first will double as the cursor.
-        LinkedListNode<T> first = new LinkedListNode<>(args[0]);
-
-        // set the head of the list to first because its first.
-        this.head = first;
-
-        // increment manually because we add this one outside the loop
-        this.count += 1;
-        for (int i = 1; i < args.length; i++) {
-            // create a new node containing args[i]
-            LinkedListNode<T> node = new LinkedListNode<>(args[i]);
-
-            // set node to be the next in the chain
-            first.setNext(node);
-
-            // set prev on the node to point back to first
-            node.setPrev(first);
-
-            // set first to node
-            first = node;
-
-            // set tail to node. I figure if I do this every loop by the time it terminates it will
-            // be correctly set.
-            this.tail = node;
-
-            // don't forget to increment the count 
-            this.count += 1;
+        LinkedListNode<T> current = null;
+        for (T item : args) {
+            if (this.head == null) {
+                System.out.println("inserting item: " + item);
+                LinkedListNode<T> node = new LinkedListNode<>(item);
+                current = node;
+                this.head = current;
+                this.count += 1;
+            } else {
+                System.out.println("inserting item: " + item);
+                LinkedListNode<T> node = new LinkedListNode<>(item);
+                current.setNext(node);
+                current = node;
+                this.tail = current;
+                this.count += 1;
+            }
         }
+        System.out.println("head: " + this.head);
+        System.out.println("tail: " + this.tail);
     }
 
     public LinkedList(LinkedListNode<T> head) {
@@ -85,7 +76,11 @@ public class LinkedList<T> implements SequenceInterface<T>, DynamicArrayInterfac
         LinkedListNode<T> current = this.head;
         int counter = 0;
         T result = null;
-        while (counter != idx) {
+        while (current.getNext() != null) {
+            if (counter == idx - 1) {
+                result = current.getItem();
+            }
+            current = current.getNext();
             counter += 1;
         }
 
@@ -155,7 +150,7 @@ public class LinkedList<T> implements SequenceInterface<T>, DynamicArrayInterfac
         int counter = 0;
         LinkedListNode<T> current = this.head;
 
-        while (counter != idx) {
+        while (current.getNext() != null) {
             if (counter == idx) {
                 LinkedListNode<T> a = current.getPrev();
                 LinkedListNode<T> b = current.getNext();
@@ -203,7 +198,7 @@ public class LinkedList<T> implements SequenceInterface<T>, DynamicArrayInterfac
         LinkedListNode<T> current = this.head;
 
         int counter = 0;
-        while (counter != idx) {
+        while (current.getNext() != null) {
             // If I did this right this should shove the new node right between two existing ones.
             if (counter == idx) {
                 LinkedListNode<T> a = current.getPrev();
@@ -211,6 +206,7 @@ public class LinkedList<T> implements SequenceInterface<T>, DynamicArrayInterfac
                 node.setNext(current);
                 this.count += 1;
             }
+            current = current.getNext();
             counter += 1;
         }
     }
@@ -243,7 +239,8 @@ public class LinkedList<T> implements SequenceInterface<T>, DynamicArrayInterfac
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("LinkedList[");
+        sb.append("LinkedList");
+        sb.append("(" + this.count + ")[");
         for (T item : this) {
             sb.append(item + ", ");
         }
