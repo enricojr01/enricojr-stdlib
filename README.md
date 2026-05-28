@@ -128,5 +128,11 @@ following criteria:
 - After a delete, if the itemCount is less than or equal to 25% of the length of the StaticArray, 
 then a smaller StaticArray will be created and the items copied over.
 - Before an insert, if `itemCount + 1` is greater than `sequence.length`, then a new StaticArray
-is created, with a size equal to the next highest mutltiple of 8 (based on itemCount), and the items copied.
+is created, with a size equal to the next highest mutltiple of 8 (based on itemCount), and the 
+items copied over.
 
+Although the DynamicArray concrete class implements both SequenceInterface and 
+DynamicArrayInterface, calling the `setAt()` method will throw an UnsupportedOperationException 
+because I've deemed it safer to use the `insertAt()` method instead, rather than duplicating the
+resize logic in both functions, or cook up a way for one to call the other and vice versa. So the 
+`setAt()` method is implemented simply to conform to the interface but is otherwise nonfunctional.

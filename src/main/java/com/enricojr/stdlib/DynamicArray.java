@@ -17,8 +17,11 @@ public class DynamicArray<T> implements SequenceInterface<T>, DynamicArrayInterf
     private StaticArray<T> internal;
 
     public DynamicArray(T... args) {
-        int totalSpaces = args.length + this.chunkSize - (this.itemCount % this.chunkSize);
-        // this.internal = (T[]) new Object[totalSpaces];
+        int totalSpaces = args.length + this.chunkSize - (args.length % this.chunkSize);
+        // NOTE: should have no fewer than 8 slots.
+        if (totalSpaces < 8) {
+            totalSpaces = 8;
+        }
         this.internal = new StaticArray<T>(totalSpaces);
 
         for (int i = 0; i < args.length; i++) {
@@ -53,13 +56,7 @@ public class DynamicArray<T> implements SequenceInterface<T>, DynamicArrayInterf
 
     @Override
     public void setAt(int x, T item) {
-        // disallow setting beyond itemCount
-        if (x >= this.itemCount - 1) {
-            throw new ArrayIndexOutOfBoundsException("Use insertLast() to safely write to the end of a DynamicArray");
-        }
-
-        // note that SET overwrites an item
-        this.internal.setAt(x, item);
+        throw new UnsupportedOperationException("Call insertAt() instead!");
     }
 
     @Override
@@ -84,7 +81,7 @@ public class DynamicArray<T> implements SequenceInterface<T>, DynamicArrayInterf
         this.shiftForward(1);
 
         // insert item into index 0, overwriting its contents.
-        this.setAt(0, item);
+        this.internal.setAt(0, item);
 
         // increment itemCount to reflect newly added item.
         this.itemCount += 1;
@@ -92,11 +89,24 @@ public class DynamicArray<T> implements SequenceInterface<T>, DynamicArrayInterf
 
     @Override
     public void insertLast(T item) {
+        // check to see if adding 1 to this array requires that we resize.
+        if (this.itemCount + 1 >= this.internal.len()) {
+            this.resize();
+        } 
+
+        // nothing needs to be shifted forward or back because we are adding to the end
+        this.internal.setAt(this.itemCount, item);
+        this.itemCount += 1;
+    }
+
+    @Override
+    public void insertAt(int idx, T item) {
         if (this.itemCount + 1 >= this.internal.len() - 1) {
             this.resize();
         }
 
-        this.setAt(this.itemCount + 1, item);
+        this.shiftForward(idx);
+        this.internal.setAt(idx, item);
         this.itemCount += 1;
     }
 
@@ -118,30 +128,20 @@ public class DynamicArray<T> implements SequenceInterface<T>, DynamicArrayInterf
     @Override
     public void deleteLast() {
         // special case: final element doesn't have anything past it that needs shifting back
-        this.itemCount -= 1;
+        this.deleteAt(itemCount);
     }
 
-    @Override
-    public void insertAt(int idx, T item) {
-        if (this.itemCount + 1 >= this.internal.len() - 1) {
-            this.resize();
-        }
-
-        this.shiftForward(idx);
-        this.setAt(idx, item);
-        this.itemCount += 1;
-    }
 
     @Override
     public void deleteAt(int idx) {
         // move all elements from idx onwards back one space, thereby erasing this.internal[idx].
         this.shiftBackward(idx);
+        this.itemCount -= 1;
 
         // resize the array if the total itemCount is 25% of the current arraySize
         if (this.itemCount <= Math.floorDiv(this.arraySize, 4)) {
             this.resize();
         }
-        this.itemCount -= 1;
     }
 
     private void resize() {
@@ -149,9 +149,7 @@ public class DynamicArray<T> implements SequenceInterface<T>, DynamicArrayInterf
         // SPEC: for shrinking - whenever itemCount is 25% of arraySize, resize to the next highest
         //       multiple of 8 based on itemCount, thereby shrinking the array.
         // SPEC: Both of the above will be checked outside the call to resize()
-        int newArraySize = 
-            (this.itemCount + 1) + this.chunkSize - (this.itemCount % this.chunkSize);
-        System.out.println("Resizing internal array to: " + newArraySize);
+        int newArraySize = (this.itemCount + 1) + this.chunkSize - ((this.itemCount + 1) % this.chunkSize);
 
         // TODO: Find a way to guard against this, otherwise suppress the warning.
         StaticArray<T> newArray = new StaticArray(newArraySize);
@@ -165,15 +163,13 @@ public class DynamicArray<T> implements SequenceInterface<T>, DynamicArrayInterf
     }
 
     private void shiftForward(int startingIdx) {
-        for (int i = this.internal.len() - 1; i >= 0; i--) {
+        for (int i = this.internal.len() - 2; i >= 0; i--) {
             this.internal.setAt(i + 1, this.internal.getAt(i));
-            // this.internal[i + 1] = this.internal[i];
         }
     }
 
     private void shiftBackward(int startingIdx) {
         for (int i = startingIdx; i < itemCount; i++) {
-            // this.internal[i] = this.internal[i + 1];
             this.internal.setAt(i, this.internal.getAt(i + 1));
         }
     }
