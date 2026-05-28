@@ -61,19 +61,6 @@ Theta(n^c) - "Polynomial", i.e the runtime of an algorithm increases by n ^ c ya
 # SequenceInterface
 A Java interface representing the set of operations that a Sequence is meant to be able to perform.
 
-The Java array already provides the functionality we are looking for, but the concrete class 
-`StaticArray` wraps the Java array anyways to provide an interface that conforms to the 
-specification here.
-
-The class defined a `build()` function on all of the interfaces described, but Java's constructors 
-stand in for that already, so `build()` has been excluded from the interface definition.
-
-`iterable()` will be provided by implementing Java's Iterator interface, and custom Iterators where 
-appropriate.
-
-
-The methods are annotated below for documentation purposes.
-
 ```java
 public interface SequenceInterface<T> {
     // returns the number of items in the sequence.
@@ -99,25 +86,22 @@ public interface SequenceInterface<T> {
 }
 ```
 
+The Java array already provides the functionality we are looking for, but the concrete class 
+`StaticArray` wraps the Java array anyways to provide an interface that conforms to the 
+specification here.
+
+The class defined a `build()` function on all of the interfaces described, but Java's constructors 
+stand in for that already, so `build()` has been excluded from the interface definition.
+
+`iterable()` will be provided by implementing Java's Iterator interface, and custom Iterators where 
+appropriate.
+
+The methods are annotated below for documentation purposes.
+
+
 # DynamicArrayInterface
 An companion to the SequenceInterface that describes behavior required for Dynamic Arrays (ones 
 that resize in response to inserts / deletes).
-
-The difference between setAt() and insertAt() is that setAt(x, item) will _overwrite_ `sequence[x]`
-with item, whereas insertAt(x, item) will move items from sequence[x] onwards one position forward
-before placing item at sequence[x].
-
-In a similar fashion, deleteAt(x) / deleteFirst(x) / deleteLast(x) will shift items one position 
-backwards, thereby erasing the item at `sequence[x]`.
-
-All insert and delete methods will trigger a resize of the array when necessary, according to the 
-following criteria:
-
-- The class declares a `chunkSize` constant of 8.
-- After a delete, if the itemCount is less than or equal to 25% of the length of the StaticArray, 
-then a smaller StaticArray will be created and the items copied over.
-- Before an insert, if `itemCount + 1` is greater than `sequence.length`, then a new StaticArray
-is created, with a size equal to the next highest mutltiple of 8 (based on itemCount), and the items copied over.
 
 ```java
 public interface DynamicArrayInterface<T> {
@@ -129,3 +113,20 @@ public interface DynamicArrayInterface<T> {
     void deleteLast();
 }
 ```
+
+The difference between setAt() on StaticArray and insertAt() here is that setAt(x, item) will 
+_overwrite_ `sequence[x]` with item, whereas insertAt(x, item) will move items from sequence[x] 
+onwards one position forward before placing item at sequence[x].
+
+In a similar fashion, deleteAt(x) / deleteFirst(x) / deleteLast(x) will shift items one position 
+backwards, thereby erasing the item at `sequence[x]`.
+
+All insert and delete methods will trigger a resize of the array when necessary, according to the 
+following criteria:
+
+- The class declares a `chunkSize` constant of 8.
+- After a delete, if the itemCount is less than or equal to 25% of the length of the StaticArray, 
+then a smaller StaticArray will be created and the items copied over.
+- Before an insert, if `itemCount + 1` is greater than `sequence.length`, then a new StaticArray
+is created, with a size equal to the next highest mutltiple of 8 (based on itemCount), and the items copied.
+

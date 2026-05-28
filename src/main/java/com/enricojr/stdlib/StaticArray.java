@@ -5,7 +5,6 @@ import com.enricojr.stdlib.interfaces.SequenceInterface;
 public class StaticArray<T> implements SequenceInterface<T> {
     private T[] internal;
 
-
     public StaticArray(T... args) {
         this.internal = (T[]) new Object[args.length];
 
