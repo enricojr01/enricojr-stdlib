@@ -1,4 +1,4 @@
-package com.enricojr.stdlib;
+package com.enricojr.stdlib.sequences;
 
 public class LinkedListNode<T> {
     private LinkedListNode<T> prev;

@@ -1,5 +1,7 @@
 package com.enricojr.stdlib;
 
+import com.enricojr.stdlib.sequences.DynamicArray;
+
 /**
  * Hello world!
  */

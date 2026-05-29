@@ -1,4 +1,4 @@
-package com.enricojr.stdlib;
+package com.enricojr.stdlib.sequences;
 
 import java.security.InvalidParameterException;
 import java.util.Iterator;

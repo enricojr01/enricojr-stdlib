@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
 import java.util.stream.IntStream;
 import org.junit.jupiter.api.Test;
+import com.enricojr.stdlib.sequences.DynamicArray;
 
 public class TestDynamicArray {
 
