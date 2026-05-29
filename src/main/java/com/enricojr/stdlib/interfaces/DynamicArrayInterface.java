@@ -1,6 +1,7 @@
 package com.enricojr.stdlib.interfaces;
 
 public interface DynamicArrayInterface<T> {
+    int len();
     void insertAt(int idx, T item);
     void deleteAt(int idx);
     void insertFirst(T item);

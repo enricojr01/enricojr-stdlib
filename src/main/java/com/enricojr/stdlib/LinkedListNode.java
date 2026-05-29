@@ -47,6 +47,5 @@ public class LinkedListNode<T> {
         sb.append(item.toString());
         sb.append(")");
         return sb.toString();
-
     }
 }

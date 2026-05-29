@@ -1,7 +1,8 @@
 package com.enricojr.stdlib;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.ArrayList;
+import java.util.stream.IntStream;
 import org.junit.jupiter.api.Test;
 
 public class TestDynamicArray {
@@ -10,69 +11,45 @@ public class TestDynamicArray {
     public void testDynamicArrayCreate() {
         DynamicArray<Integer> dai = new DynamicArray<>(1, 2, 3, 4, 5);
         assertEquals(5, dai.len());
-        assertEquals(8, dai.getArraySize());
-        System.out.println("testDynamicArrayCreate: " + dai);
     }
 
     @Test
-    public void testMinSize8() {
+    public void testDynamicArrayCreateEmpty() {
+        DynamicArray<Integer> dai = new DynamicArray<>();
+        assertEquals(16, dai.getArraySize());
+    }
+
+    @Test
+    public void testDynamicArrayMinSize() {
         DynamicArray<Integer> dai = new DynamicArray<>(1, 2, 3, 4, 5, 6, 7);
-        assertEquals(8,  dai.getArraySize());
-        System.out.println("testMinSize8: " + dai);
+        assertEquals(16, dai.getArraySize());
     }
 
     @Test
-    public void testMinSize8Again() {
+    public void testDynamicArrayMinSizeAgain() {
         DynamicArray<Integer> dai = new DynamicArray<>(1);
-        assertEquals(8,  dai.getArraySize());
-        System.out.println("testMinSize8Again: " + dai);
+        assertEquals(16, dai.getArraySize());
     }
 
     @Test
-    public void testGrow() {
-        DynamicArray<Integer> dai = new DynamicArray<>(1, 2, 3, 4, 5, 6, 7);
-        assertEquals(8, dai.getArraySize());
-
-        dai.insertLast(8);
+    public void testDynamicArrayGrow() {
+        DynamicArray<Integer> dai = 
+            new DynamicArray<>(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
         assertEquals(16, dai.getArraySize());
-        System.out.println("testGrow: " + dai);
+        dai.insertLast(17);
+        assertEquals(dai.len() * 2, dai.getArraySize());
     }
 
     @Test
-    public void testShrink() {
-        DynamicArray<Integer> dai = new DynamicArray<>(1, 2, 3, 4, 5, 6, 7, 8, 9);
-        assertEquals(16, dai.getArraySize());
+    public void testDynamicArrayShrink() {
+        DynamicArray<Integer> dai = new DynamicArray<>(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18);
+        assertEquals(36, dai.getArraySize());
 
-        // DynamicArray should shrink when itemCount is 25% of arraySize.
-        // This means when I get it to 4 items it should shrink to 8.
+        IntStream
+            .range(0, 12)
+            .forEach(x -> dai.deleteLast());
 
-        dai.deleteLast();
-        dai.deleteLast();
-        dai.deleteLast();
-        dai.deleteLast();
-        dai.deleteLast();
-
-        assertEquals(8, dai.getArraySize());
-        assertEquals(4, dai.len());
-        System.out.println("testShrink: " + dai);
-    }
-
-    @Test
-    public void testShrink2() {
-        DynamicArray<Integer> dai = new DynamicArray<>(1, 2, 3, 4, 5, 6, 7, 8, 9);
-        assertEquals(16, dai.getArraySize());
-
-        // DynamicArray should shrink when itemCount is 25% of arraySize.
-        // This means at 5 items, arraySize should still be 16.
-
-        dai.deleteLast();
-        dai.deleteLast();
-        dai.deleteLast();
-        dai.deleteLast();
-
-        assertEquals(16, dai.getArraySize());
-        assertEquals(5, dai.len());
-        System.out.println("testShrink2: " + dai);
+        assertEquals(((25.0f / 100.0f) * 36) * 2, dai.getArraySize());
     }
 
     @Test
@@ -82,7 +59,6 @@ public class TestDynamicArray {
 
         assertEquals(57, dai.getFirst());
         assertEquals(5, dai.getLast());
-        System.out.println("testDynamicArrayInsertFirst: " + dai);
     }
 
     @Test
@@ -92,7 +68,18 @@ public class TestDynamicArray {
 
         assertEquals(225, dai.getLast());
         assertEquals(1, dai.getFirst());
-        System.out.println("testDynamicArrayInsertLast: " + dai);
+    }
+
+    @Test
+    public void testDynamicArrayInsertAt() {
+        DynamicArray<Integer> dai = new DynamicArray<>(1, 2, 3, 4, 5);
+        dai.insertAt(3, 56);
+
+        int res = dai.getAt(3);
+
+        assertEquals(56, res);
+        assertEquals(4, dai.getAt(4));
+
     }
 
     @Test
@@ -101,7 +88,6 @@ public class TestDynamicArray {
         dai.deleteAt(2);
 
         assertEquals(4, dai.getAt(2));
-        System.out.println("testDynamicArrayDeleteAt: " + dai);
     }
 
     @Test
@@ -110,7 +96,6 @@ public class TestDynamicArray {
         int res = dai.getFirst();
 
         assertEquals(1, res);
-        System.out.println("testDynamicArrayGetFirst: " + dai);
     }
 
     @Test
@@ -119,17 +104,22 @@ public class TestDynamicArray {
         int res = dai.getLast();
 
         assertEquals(5, res);
-        System.out.println("testDynamicArrayGetLast: " + dai);
+    }
+
+    @Test
+    public void testDynamicArrayGetAt() {
+        DynamicArray<Integer> dai = new DynamicArray<>(1, 2, 3, 4, 5);
+        int res = dai.getAt(2);
+        assertEquals(3, res);
     }
 
     @Test
     public void testDynamicArrayIterator() {
         DynamicArray<Integer> dai = new DynamicArray<>(1, 2, 3, 4, 5);
-        System.out.print("testDynamicArrayIterator: ");
-        for (int i : dai) {
-            System.out.print("i = " + i + ", ");
+        ArrayList<Integer> results = new ArrayList<>();
+        for (int i: dai) {
+            results.add(i);
         }
-        System.out.println();
-        assertTrue(true);
+        assertEquals(results.size(), dai.len());
     }
 }
