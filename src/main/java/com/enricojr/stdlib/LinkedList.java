@@ -16,53 +16,62 @@ public class LinkedList<T> implements SequenceInterface<T>, DynamicArrayInterfac
         LinkedListNode<T> current = null;
         for (T item : args) {
             if (this.head == null) {
-                System.out.println("inserting item: " + item);
                 LinkedListNode<T> node = new LinkedListNode<>(item);
                 current = node;
                 this.head = current;
                 this.count += 1;
             } else {
-                System.out.println("inserting item: " + item);
                 LinkedListNode<T> node = new LinkedListNode<>(item);
                 current.setNext(node);
+                node.setPrev(current);
                 current = node;
                 this.tail = current;
                 this.count += 1;
             }
         }
-        System.out.println("head: " + this.head);
-        System.out.println("tail: " + this.tail);
     }
 
-    public LinkedList(LinkedListNode<T> head) {
-        this.head = head;
-        this.tail = head;
-        this.count += 1;
-    }
-
-    public LinkedList(LinkedListNode<T> head, LinkedListNode<T> tail) {
-        this.head = head;
-        this.tail = tail;
-        this.count += 2;
-    }
-
+    /**
+     * Returns an iterator over the Linked List. This is mainly to support the "enhanced" for loop
+     * i.e. `for (T item : myLinkedList) { ... }` 
+     */
     @Override
     public Iterator<T> iterator() {
         return new LinkedListIterator<>(this);
     }
 
+    /**
+     * Returns the head of the linked list. Functionally identical to .getFirst(), but provided
+     * separately here in case you'd like to refer to it as the 'head' rather than the 'first'.
+     * Runs in O(1) time because we store a reference to the head and return it.
+     */
+
     public LinkedListNode<T> getHead() {
         return head;
     }
-
+    
+    /**
+     * Sets the head of the linked list to a `head`. Used mainly for constructing the initial list
+     * and doesn't have any special uses otherwise. Runs in O(1) time.
+     * @param head
+     */
     public void setHead(LinkedListNode<T> head) {
         this.head = head;
     }
 
+    /**
+     * Returns the tail of the linked list. Functionally identical to .getLast() but with different
+     * semantics. Runs in O(1) time because we store a reference to the tail and simply return it.
+     */
     public LinkedListNode<T> getTail() {
         return tail;
     }
 
+    /**
+     * Sets the tail of the list, and like setHead() is really only used for constructing the 
+     * initial list.
+     * @param tail
+     */
     public void setTail(LinkedListNode<T> tail) {
         this.tail = tail;
     }
@@ -73,23 +82,31 @@ public class LinkedList<T> implements SequenceInterface<T>, DynamicArrayInterfac
      */
     @Override
     public T getAt(int idx) {
-        LinkedListNode<T> current = this.head;
+        if (idx > this.count - 1) {
+            throw new ArrayIndexOutOfBoundsException();
+        } else if (idx == this.count - 1) {
+            this.getLast();
+        } else if (idx == 0) {
+            this.getFirst();
+        }
+
         int counter = 0;
-        T result = null;
-        while (current.getNext() != null) {
-            if (counter == idx - 1) {
-                result = current.getItem();
-            }
+        LinkedListNode<T> current = this.head;
+
+        // NOTE: kinda unintuitive but it won't capture the final element if you're using
+        // the typical while (current.getNext() != null) condition check.
+        // incrementing idx by one and pulling the result AFTER the loop will solve this problem
+        while (counter != idx) {
             current = current.getNext();
             counter += 1;
         }
 
-        return result;
+        return current.getItem();
     }
 
     /**
-     * Returns the first item in the linked list. Runs in O(1) time because we augmeted the
-     * LinkedList to store the head, and update it whenever the list changes.
+     * Returns, but does not delete, the first item in the linked list. Runs in O(1) time because 
+     * we augmeted the LinkedList to store the head, and update it whenever the list changes.
      */
     @Override
     public T getFirst() {
@@ -97,8 +114,8 @@ public class LinkedList<T> implements SequenceInterface<T>, DynamicArrayInterfac
     }
 
     /**
-     * Returns the last item in the linked list. Runs in O(1) time because we augmented the
-     * LinkedList to store the tail, and update it whenever the list changes.
+     * Returns, but odes not delete, the last item in the linked list. Runs in O(1) time because we 
+     * augmented the LinkedList to store the tail, and update it whenever the list changes.
      */
     @Override
     public T getLast() {
@@ -147,22 +164,34 @@ public class LinkedList<T> implements SequenceInterface<T>, DynamicArrayInterfac
      */
     @Override
     public void deleteAt(int idx) {
+        if (idx > this.count - 1) {
+            throw new ArrayIndexOutOfBoundsException();
+        }
+        if (idx == 0) {
+            this.deleteFirst();
+        }
+        if (idx == this.count - 1) {
+            this.deleteLast();
+        }
+
         int counter = 0;
         LinkedListNode<T> current = this.head;
 
-        while (current.getNext() != null) {
-            if (counter == idx) {
-                LinkedListNode<T> a = current.getPrev();
-                LinkedListNode<T> b = current.getNext();
-                // these two operations should leave the node orphaned, and the GC should sweep
-                // it away.
-                a.setNext(b);
-                b.setPrev(a);
-                break;
-            }
-            current = current.getNext(); 
+        // move first
+        while (counter != idx) {
+            current = current.getNext();
             counter += 1;
         }
+
+        // then delete
+        // prev - current - next
+        // prev - next
+        LinkedListNode<T> previous = current.getPrev();
+        LinkedListNode<T> next = current.getNext();
+        previous.setNext(next);
+        next.setPrev(previous);
+
+        // decrement internal item count
         this.count -= 1;
     }
 
@@ -194,21 +223,44 @@ public class LinkedList<T> implements SequenceInterface<T>, DynamicArrayInterfac
      */
     @Override
     public void insertAt(int idx, T item) {
-        LinkedListNode<T> node = new LinkedListNode<T>(item);
+        // check if index OOB and throw exception, Linked Lists here are 0-based.
+        if (idx > this.count - 1) {
+            throw new ArrayIndexOutOfBoundsException();
+        }
+        // if index == 0, just call this.insertFirst() no need to repeat the logic here
+        if (idx == 0) {
+            this.insertFirst(item);
+        }
+        // ditto with index == this.count - 1 (i.e. last) no need to repeat that logic here.
+        if (idx == this.count - 1) {
+            this.insertLast(item);
+        }
+
+        // we start at the head, of course.
         LinkedListNode<T> current = this.head;
 
+        // move first, THEN act.
         int counter = 0;
-        while (current.getNext() != null) {
-            // If I did this right this should shove the new node right between two existing ones.
-            if (counter == idx) {
-                LinkedListNode<T> a = current.getPrev();
-                node.setPrev(a);
-                node.setNext(current);
-                this.count += 1;
-            }
+        while (counter != idx) {
             current = current.getNext();
             counter += 1;
         }
+
+        // build the node and insert it:
+        // previous - current - next
+        // previous - NEW - current - next
+        LinkedListNode<T> currentPrev = current.getPrev();
+        LinkedListNode<T> node = new LinkedListNode<T>(item);
+
+        // set previous node to point to new node 
+        currentPrev.setNext(node);
+
+        // set new node
+        node.setNext(current);
+        node.setPrev(currentPrev);
+
+        // set current node prev to point to new node
+        current.setPrev(node);
     }
 
     /** 

@@ -27,7 +27,6 @@ public class LinkedListIterator<T> implements Iterator<T> {
     @Override
     public T next() {
         T item = this.current.getItem();
-        System.out.println("Yielding item: " + item);
         this.current = current.getNext();
         this.counter += 1;
         return item;
