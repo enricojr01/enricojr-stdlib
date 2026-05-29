@@ -1,9 +1,12 @@
 package com.enricojr.stdlib.sets;
 
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 import com.enricojr.stdlib.interfaces.SetInterface;
 import com.enricojr.stdlib.sequences.StaticArray;
 
-public class SetArray<T extends Comparable<T>> implements SetInterface<T> {
+public class SetArray<T extends Comparable<T>> implements SetInterface<T>, Iterable<T> {
 
     private StaticArray<T> internal;
 
@@ -17,15 +20,16 @@ public class SetArray<T extends Comparable<T>> implements SetInterface<T> {
         this.internal = new StaticArray<T>(args);
     }
 
-    // /**
-    //  * Returns an iterator of the internal StaticArray<T>. Allows SetArray to be used with the
-    //  * enhanced Java for syntax.
-    //  * 
-    //  * @return an instance of SequenceIterator<T>
-    //  */
-    // public SequenceIterator<T> iterator() {
-    //     return new SequenceIterator<>(internal);
-    // }
+    /**
+     * Returns an iterator of the internal StaticArray<T>. Allows SetArray to be used with the
+     * enhanced Java for syntax.
+     * 
+     * @return an instance of SequenceIterator<T>
+     */
+    public Iterator<T> iterator() {
+        List<T> thing = Arrays.asList(this.internal.getArray());
+        return thing.iterator();
+    }
 
     /**
      * Removes item from the array.

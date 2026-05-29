@@ -1,10 +1,11 @@
 package com.enricojr.stdlib.sequences;
 
-import java.util.Iterator;
-import com.enricojr.stdlib.interfaces.SequenceInterface;
-import com.enricojr.stdlib.iterators.SequenceIterator;
+import com.enricojr.stdlib.interfaces.DynamicSequenceInterface;
+import com.enricojr.stdlib.interfaces.StaticSequenceInterface;
+import com.enricojr.stdlib.iterators.StaticSequenceIterator;
 
-public class DynamicArray<T> implements SequenceInterface<T>, Iterable<T> {
+public class DynamicArray<T> implements 
+    StaticSequenceInterface<T>, DynamicSequenceInterface<T>, Iterable<T> {
     private float growFactor = 0.75f;
     private float shrinkFactor = 0.25f;
 
@@ -69,8 +70,8 @@ public class DynamicArray<T> implements SequenceInterface<T>, Iterable<T> {
      * Returns an iterator that makes these arrays usable with Java's "enhanced" for syntax.
      */
     @Override
-    public Iterator<T> iterator() {
-        return new SequenceIterator<T>(this);
+    public StaticSequenceIterator<T> iterator() {
+        return new StaticSequenceIterator<>(this);
     }
 
     /**

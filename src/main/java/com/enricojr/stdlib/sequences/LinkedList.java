@@ -1,10 +1,12 @@
 package com.enricojr.stdlib.sequences;
 
 import java.util.Iterator;
-import com.enricojr.stdlib.interfaces.SequenceInterface;
+import com.enricojr.stdlib.interfaces.DynamicSequenceInterface;
+import com.enricojr.stdlib.interfaces.StaticSequenceInterface;
 import com.enricojr.stdlib.iterators.LinkedListIterator;
 
-public class LinkedList<T> implements SequenceInterface<T>, Iterable<T> {
+public class LinkedList<T> implements 
+    StaticSequenceInterface<T>, DynamicSequenceInterface<T>, Iterable<T> {
     private LinkedListNode<T> head;
     private LinkedListNode<T> tail;
     private int count = 0;

@@ -1,13 +1,13 @@
 package com.enricojr.stdlib.iterators;
 
 import java.util.Iterator;
-import com.enricojr.stdlib.interfaces.SequenceInterface;
+import com.enricojr.stdlib.interfaces.StaticSequenceInterface;
 
-public class SequenceIterator<T> implements Iterator<T> {
-    private SequenceInterface<T> sequence;
+public class StaticSequenceIterator<T> implements Iterator<T> {
+    private StaticSequenceInterface<T> sequence;
     private int index;
 
-    public SequenceIterator(SequenceInterface<T> seq) {
+    public StaticSequenceIterator(StaticSequenceInterface<T> seq) {
         this.sequence = seq;
     }
 

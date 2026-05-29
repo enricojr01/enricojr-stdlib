@@ -1,10 +1,9 @@
 package com.enricojr.stdlib.sequences;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import com.enricojr.stdlib.interfaces.StaticSequenceInterface;
+import com.enricojr.stdlib.iterators.StaticSequenceIterator;
 
-public class StaticArray<T> implements Iterable<T> {
+public class StaticArray<T> implements StaticSequenceInterface<T>, Iterable<T> {
     private T[] internal;
 
     /**
@@ -36,17 +35,15 @@ public class StaticArray<T> implements Iterable<T> {
      * provided by Java.
      */
     @Override
-    public Iterator<T> iterator() {
-        // holy hell this feels like a bad hack.
-        // TODO: look into whether or not this is idiomatic.
-        List<T> thing = Arrays.asList(this.internal);
-        return thing.iterator();
+    public StaticSequenceIterator<T> iterator() {
+        return new StaticSequenceIterator<T>(this);
     }
 
     /**
      * Returns the item at position x in the array. Runs in O(1) time, as it is just wrapping Java's
      * built-in array operations.
      */
+    @Override
     public T getAt(int x) {
         return this.internal[x];
     }
@@ -55,6 +52,7 @@ public class StaticArray<T> implements Iterable<T> {
      * Inserts item at position x in the array, overwriting existing contents. Runs in O(1) time for
      * the same reason as getAt().
      */
+    @Override
     public void setAt(int x, T item) {
         this.internal[x] = item;
     }
@@ -63,8 +61,20 @@ public class StaticArray<T> implements Iterable<T> {
      * Returns the length of the array. Runs in O(1) time, as the length is stored in the array 
      * itself and simply returned.
      */
+    @Override
     public int len() {
         return this.internal.length;
+    }
+
+    /**
+     * Returns the internal array of type T[] because I can't implement SetArray otherwise. Now 
+     * that this no longer implements SequenceInterface I cant use the SequenceIterator for it. 
+     * Don't quite know if that was the right choice or not.
+     * 
+     * @return
+     */
+    public T[] getArray() {
+        return this.internal;
     }
 
     public String toString() {
