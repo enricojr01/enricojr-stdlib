@@ -34,36 +34,6 @@ public class TestStaticArray {
     }
 
     @Test
-    public void testStaticGetFirst() {
-        StaticArray<Integer> sai = new StaticArray<>(1, 2, 3, 4, 5);
-        int res = sai.getFirst();
-        assertEquals(1, res);
-    }
-
-    @Test
-    public void testStaticGetLast() {
-        StaticArray<Integer> sai = new StaticArray<>(1, 2, 3, 4, 5);
-        int res = sai.getLast();
-        assertEquals(5, res);
-    }
-
-    @Test
-    public void testStaticSetFirst() {
-        StaticArray<Integer> sai = new StaticArray<>(1, 2, 3, 4, 5);
-        sai.setFirst(5432);
-        int res = sai.getFirst();
-        assertEquals(5432, res);
-    }
-
-    @Test
-    public void testStaticSetLast() {
-        StaticArray<Integer> sai = new StaticArray<>(1, 2, 3, 4, 5);
-        sai.setLast(1234);
-        int res = sai.getLast();
-        assertEquals(1234, res);
-    }
-
-    @Test
     public void testIterator() {
         StaticArray<Integer> sai = new StaticArray<>(1, 2, 3, 4, 5);
         for (int i : sai) {

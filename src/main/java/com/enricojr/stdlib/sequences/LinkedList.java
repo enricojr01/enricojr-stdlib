@@ -1,11 +1,10 @@
 package com.enricojr.stdlib.sequences;
 
 import java.util.Iterator;
-import com.enricojr.stdlib.interfaces.DynamicArrayInterface;
 import com.enricojr.stdlib.interfaces.SequenceInterface;
 import com.enricojr.stdlib.iterators.LinkedListIterator;
 
-public class LinkedList<T> implements SequenceInterface<T>, DynamicArrayInterface<T>, Iterable<T> {
+public class LinkedList<T> implements SequenceInterface<T>, Iterable<T> {
     private LinkedListNode<T> head;
     private LinkedListNode<T> tail;
     private int count = 0;
@@ -59,11 +58,11 @@ public class LinkedList<T> implements SequenceInterface<T>, DynamicArrayInterfac
 
     /**
      * Returns the head of the linked list. Unlike .getFirst() this will return the actual 
-     * LinkedListNode.
+     * LinkedListNode. Made public for use by the LinkedListIterator.
      * 
      * Runs in O(1) time because we store a reference to the head and return it.
      */
-    private LinkedListNode<T> getHead() {
+    public LinkedListNode<T> getHead() {
         return head;
     }
     
@@ -84,7 +83,7 @@ public class LinkedList<T> implements SequenceInterface<T>, DynamicArrayInterfac
      * 
      * Runs in O(1) time because we store a reference to the tail and simply return it.
      */
-    private LinkedListNode<T> getTail() {
+    public LinkedListNode<T> getTail() {
         return tail;
     }
 
@@ -135,8 +134,7 @@ public class LinkedList<T> implements SequenceInterface<T>, DynamicArrayInterfac
      * 
      * Runs in O(1) time because the class stores a reference to the head that is updated as needed.
      */
-    @Override
-    public T getFirst() {
+    private T getFirst() {
         return head.getItem();
     }
 
@@ -146,8 +144,7 @@ public class LinkedList<T> implements SequenceInterface<T>, DynamicArrayInterfac
      * 
      * Runs in O(1) time because the class stores a reference to the tail that is updated as needed.
      */
-    @Override
-    public T getLast() {
+    private T getLast() {
         return tail.getItem();
     }
 
@@ -162,7 +159,9 @@ public class LinkedList<T> implements SequenceInterface<T>, DynamicArrayInterfac
     }
 
     /**
-     * Replaces the item at position idx in the linked list.
+     * Replaces the item at position idx in the linked list. Throws ArrayOutOfBoundsException if 
+     * idx is greater than count - 1. If idx == 0, setAt() will call setFirst() to achieve O(1) 
+     * runtime, likewise if idx == count - 1, setAt() will call setLast().
      * 
      * Runs in O(n) time because we have to walk the list. 
      */
@@ -193,8 +192,7 @@ public class LinkedList<T> implements SequenceInterface<T>, DynamicArrayInterfac
      * 
      * Runs in O(1) time because we take advantage of the stored reference.
      * */
-    @Override
-    public void setFirst(T item) {
+    private void setFirst(T item) {
         this.getHead().setItem(item);
     }
 
@@ -203,8 +201,7 @@ public class LinkedList<T> implements SequenceInterface<T>, DynamicArrayInterfac
      * 
      * Runs in O(1) time because we take advantage of the stored reference.
      */
-    @Override
-    public void setLast(T item) {
+    private void setLast(T item) {
         this.getTail().setItem(item);
     }
 

@@ -1,12 +1,10 @@
 package com.enricojr.stdlib.sequences;
 
-import java.security.InvalidParameterException;
 import java.util.Iterator;
-import com.enricojr.stdlib.interfaces.DynamicArrayInterface;
 import com.enricojr.stdlib.interfaces.SequenceInterface;
 import com.enricojr.stdlib.iterators.SequenceIterator;
 
-public class DynamicArray<T> implements SequenceInterface<T>, DynamicArrayInterface<T>, Iterable<T> {
+public class DynamicArray<T> implements SequenceInterface<T>, Iterable<T> {
     private float growFactor = 0.75f;
     private float shrinkFactor = 0.25f;
 
@@ -106,42 +104,6 @@ public class DynamicArray<T> implements SequenceInterface<T>, DynamicArrayInterf
     @Override
     public void setAt(int x, T item) {
         this.insertAt(x, item);
-    }
-
-    /**
-     * Returns the first item in the array.
-     */
-    @Override
-    public T getFirst() {
-        return this.getAt(0);
-    }
-
-    /**
-     * Returns the item at the logical end of the array, i.e. array[this.itemCount - 1], and not 
-     * the actual end of the array. This is because the dynamic array overallocates, and the 
-     * internal array contains extra spaces at the end in an attempt to accommodate amortized O(1) 
-     * insert times.
-     */
-    @Override
-    public T getLast() {
-        return this.getAt(this.itemCount - 1);
-    }
-
-    /**
-     * Inserts 'item' at the beginning of the array, shifting all items forward by one.
-     */
-    @Override
-    public void setFirst(T item) {
-        this.setAt(0, item);
-    }
-
-    /**
-     * Inserts item at the "logical" end of the dynamic array i.e. index position this.itemCount - 
-     * 1, as opposed to the last index of the internal array.
-     */
-    @Override
-    public void setLast(T item) {
-        this.setAt(this.itemCount - 1, item);
     }
 
     /**

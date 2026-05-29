@@ -54,24 +54,6 @@ public class TestDynamicArray {
     }
 
     @Test
-    public void testDynamicArrayInsertFirst() {
-        DynamicArray<Integer> dai = new DynamicArray<>(1, 2, 3, 4, 5);
-        dai.insertFirst(57);
-
-        assertEquals(57, dai.getFirst());
-        assertEquals(5, dai.getLast());
-    }
-
-    @Test
-    public void testDynamicArrayInsertLast() {
-        DynamicArray<Integer> dai = new DynamicArray<>(1, 2, 3, 4, 5);
-        dai.insertLast(225);
-
-        assertEquals(225, dai.getLast());
-        assertEquals(1, dai.getFirst());
-    }
-
-    @Test
     public void testDynamicArrayInsertAt() {
         DynamicArray<Integer> dai = new DynamicArray<>(1, 2, 3, 4, 5);
         dai.insertAt(3, 56);
@@ -89,22 +71,6 @@ public class TestDynamicArray {
         dai.deleteAt(2);
 
         assertEquals(4, dai.getAt(2));
-    }
-
-    @Test
-    public void testDynamicArrayGetFirst() {
-        DynamicArray<Integer> dai = new DynamicArray<>(1, 2, 3, 4, 5);
-        int res = dai.getFirst();
-
-        assertEquals(1, res);
-    }
-
-    @Test
-    public void testDynamicArrayGetLast() {
-        DynamicArray<Integer> dai = new DynamicArray<>(1, 2, 3, 4, 5);
-        int res = dai.getLast();
-
-        assertEquals(5, res);
     }
 
     @Test

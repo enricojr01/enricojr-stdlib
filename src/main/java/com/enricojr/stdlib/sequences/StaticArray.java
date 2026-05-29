@@ -1,10 +1,10 @@
 package com.enricojr.stdlib.sequences;
 
+import java.util.Arrays;
 import java.util.Iterator;
-import com.enricojr.stdlib.interfaces.SequenceInterface;
-import com.enricojr.stdlib.iterators.SequenceIterator;
+import java.util.List;
 
-public class StaticArray<T> implements SequenceInterface<T>, Iterable<T> {
+public class StaticArray<T> implements Iterable<T> {
     private T[] internal;
 
     /**
@@ -37,14 +37,16 @@ public class StaticArray<T> implements SequenceInterface<T>, Iterable<T> {
      */
     @Override
     public Iterator<T> iterator() {
-        return new SequenceIterator<T>(this);
+        // holy hell this feels like a bad hack.
+        // TODO: look into whether or not this is idiomatic.
+        List<T> thing = Arrays.asList(this.internal);
+        return thing.iterator();
     }
 
     /**
      * Returns the item at position x in the array. Runs in O(1) time, as it is just wrapping Java's
      * built-in array operations.
      */
-    @Override
     public T getAt(int x) {
         return this.internal[x];
     }
@@ -53,48 +55,14 @@ public class StaticArray<T> implements SequenceInterface<T>, Iterable<T> {
      * Inserts item at position x in the array, overwriting existing contents. Runs in O(1) time for
      * the same reason as getAt().
      */
-    @Override
     public void setAt(int x, T item) {
         this.internal[x] = item;
-    }
-
-    /**
-     * Returns the item at the beginning of the array. Runs in O(1) time.
-     */
-    @Override
-    public T getFirst() {
-        return this.internal[0];
-    }
-
-    /**
-     * Returns the item at the end of the array. Runs in O(1) time.
-     */
-    @Override
-    public T getLast() {
-        return this.internal[this.internal.length - 1];
-    }
-
-    /**
-     * Places item at the beginning of the array, overwriting existing contents. Runs in O(1) time.
-     */
-    @Override
-    public void setFirst(T item) {
-        this.setAt(0, item);
-    }
-
-    /**
-     * Places item at the end of the array, overwriting existing contents. Runs in O(1) time.
-     */
-    @Override
-    public void setLast(T item) {
-        this.setAt(this.internal.length - 1, item);
     }
 
     /**
      * Returns the length of the array. Runs in O(1) time, as the length is stored in the array 
      * itself and simply returned.
      */
-    @Override
     public int len() {
         return this.internal.length;
     }

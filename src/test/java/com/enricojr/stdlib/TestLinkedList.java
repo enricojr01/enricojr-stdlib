@@ -15,20 +15,6 @@ public class TestLinkedList {
     }
 
     @Test
-    public void testLinkedListInsertFirst() {
-        LinkedList<Integer> lli = new LinkedList<>(1, 2, 3, 4, 5);
-        lli.insertFirst(128);
-        assertEquals(128, lli.getFirst());
-    }
-
-    @Test
-    public void testLinkedListInsertLast() {
-        LinkedList<Integer> lli = new LinkedList<>(1, 2, 3, 4, 5);
-        lli.insertLast(256);
-        assertEquals(256, lli.getLast());
-    }
-
-    @Test
     public void testLinkedListGetAtZero() {
         LinkedList<Integer> lli = new LinkedList<>(1, 2, 3, 4, 5);
         assertEquals(1, lli.getAt(0));
@@ -59,22 +45,6 @@ public class TestLinkedList {
         LinkedList<Integer> lli = new LinkedList<>(1, 2, 3, 4, 5);
         assertThrows(ArrayIndexOutOfBoundsException.class, () -> lli.insertAt(7, 123));
         lli.insertAt(3, 1024);
-    }
-
-    @Test
-    public void testLinkedListDeleteFirst() {
-        LinkedList<Integer> lli = new LinkedList<>(1, 2, 3, 4, 5);
-        lli.deleteFirst();
-        assertEquals(2, lli.getFirst());
-        assertEquals(4, lli.len());
-    }
-
-    @Test
-    public void testLinkedListDeleteLast() {
-        LinkedList<Integer> lli = new LinkedList<>(1, 2, 3, 4, 5);
-        lli.deleteLast();
-        assertEquals(4, lli.getLast());
-        assertEquals(4, lli.len());
     }
 
     @Test
