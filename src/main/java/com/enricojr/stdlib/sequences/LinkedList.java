@@ -12,6 +12,23 @@ public class LinkedList<T> implements SequenceInterface<T>, DynamicArrayInterfac
 
     public LinkedList() {}
 
+    /**
+     * This class attempts to be a textbook Linked List data structure. Maintains a reference to a
+     * head and tail of type LinkedListNode<T>, and can be used as a Sequence and Dynamic Array.
+     * 
+     * This linked list is 0-index and can be used the same way you'd use an array.
+     * 
+     * This constructor takes in varargs of type T and creates a out of them by creating 
+     * LinkedListNodes for each arg in args, and setting the head, tail, and count appropriately.
+     * 
+     * The interface is designed such that end users do not need to deal with LinkedListNodes 
+     * directly and will get items of type T. Methods that aren't in the listed interface are 
+     * meant for testing/debug use but made public to facilitate that.
+     * 
+     * Constructor takes O(n) time.
+     * 
+     * @param an array of type T as Java varargs.
+     */
     public LinkedList(T... args) {
         LinkedListNode<T> current = null;
         for (T item : args) {
@@ -41,18 +58,21 @@ public class LinkedList<T> implements SequenceInterface<T>, DynamicArrayInterfac
     }
 
     /**
-     * Returns the head of the linked list. Functionally identical to .getFirst(), but provided
-     * separately here in case you'd like to refer to it as the 'head' rather than the 'first'.
+     * Returns the head of the linked list. Unlike .getFirst() this will return the actual 
+     * LinkedListNode.
+     * 
      * Runs in O(1) time because we store a reference to the head and return it.
      */
-
-    public LinkedListNode<T> getHead() {
+    private LinkedListNode<T> getHead() {
         return head;
     }
     
     /**
-     * Sets the head of the linked list to a `head`. Used mainly for constructing the initial list
-     * and doesn't have any special uses otherwise. Runs in O(1) time.
+     * Sets the head of the linked list to a `head`. Used mainly for constructing the linked lists 
+     * manually. 
+     * 
+     * Runs in O(1) time.
+     * 
      * @param head
      */
     public void setHead(LinkedListNode<T> head) {
@@ -60,16 +80,20 @@ public class LinkedList<T> implements SequenceInterface<T>, DynamicArrayInterfac
     }
 
     /**
-     * Returns the tail of the linked list. Functionally identical to .getLast() but with different
-     * semantics. Runs in O(1) time because we store a reference to the tail and simply return it.
+     * Returns the tail of the linked list. Like getHead() it will return a LinkedListNode.
+     * 
+     * Runs in O(1) time because we store a reference to the tail and simply return it.
      */
-    public LinkedListNode<T> getTail() {
+    private LinkedListNode<T> getTail() {
         return tail;
     }
 
     /**
-     * Sets the tail of the list, and like setHead() is really only used for constructing the 
-     * initial list.
+     * Sets the tail of the list, and like setHead() is really only used when manually constructing 
+     * a linked list.
+     * 
+     * Runs in O(1) time.
+     * 
      * @param tail
      */
     public void setTail(LinkedListNode<T> tail) {
@@ -77,8 +101,9 @@ public class LinkedList<T> implements SequenceInterface<T>, DynamicArrayInterfac
     }
 
     /** 
-     * Returns the item from the LinkedListNode at position x. Runs in O(n) time because it
-     * has to walk the list one item at a time.     
+     * Returns the item from the LinkedListNode at position x. 
+     * 
+     * Runs in O(n) time because it has to walk the list one item at a time.     
      */
     @Override
     public T getAt(int idx) {
@@ -105,8 +130,10 @@ public class LinkedList<T> implements SequenceInterface<T>, DynamicArrayInterfac
     }
 
     /**
-     * Returns, but does not delete, the first item in the linked list. Runs in O(1) time because 
-     * we augmeted the LinkedList to store the head, and update it whenever the list changes.
+     * Returns the first item in the linked list. Returns the actual item of
+     * type T, and not the LinkedListNode.
+     * 
+     * Runs in O(1) time because the class stores a reference to the head that is updated as needed.
      */
     @Override
     public T getFirst() {
@@ -114,8 +141,10 @@ public class LinkedList<T> implements SequenceInterface<T>, DynamicArrayInterfac
     }
 
     /**
-     * Returns, but odes not delete, the last item in the linked list. Runs in O(1) time because we 
-     * augmented the LinkedList to store the tail, and update it whenever the list changes.
+     * Returns the last item in the linked list. Returns the actual item of type T and not the
+     * LinkedListNode. 
+     * 
+     * Runs in O(1) time because the class stores a reference to the tail that is updated as needed.
      */
     @Override
     public T getLast() {
@@ -123,8 +152,9 @@ public class LinkedList<T> implements SequenceInterface<T>, DynamicArrayInterfac
     }
 
     /**
-     * Returns the number of items in the linked list. Runs in O(1) time because we augmented
-     * the LinkedList to store the number of items, and update it whenever the list changes.
+     * Returns the number of items in the linked list. 
+     * Runs in O(1) time because we augmented the LinkedList to store the number of items, and 
+     * update it whenever the list changes.
      */
     @Override
     public int len() {
@@ -132,35 +162,56 @@ public class LinkedList<T> implements SequenceInterface<T>, DynamicArrayInterfac
     }
 
     /**
-     * Wraps a call to insertAt(). Unlike the StaticArray, this will not replace the item position x
-     * but will instead be inserted alongside it.
+     * Replaces the item at position idx in the linked list.
+     * 
+     * Runs in O(n) time because we have to walk the list. 
      */
     @Override
-    public void setAt(int x, T item) {
-        this.insertAt(x, item);
+    public void setAt(int idx, T item) {
+        if (idx > this.count - 1) {
+            throw new ArrayIndexOutOfBoundsException();
+        }
+        if (idx == 0) {
+            this.setFirst(item);
+        }
+        if (idx == this.count - 1) {
+            this.setLast(item);
+        }
+
+        int counter = 0;
+        LinkedListNode<T> current = this.getHead();
+
+        while (counter != idx) {
+            current = current.getNext();
+        }
+
+        current.setItem(item);
     }
 
     /**
-     * Wraps a call to insertFirst(). Does not replace the head, but instead is inserted before it, 
-     * and promoted.
-     */
+     * Replaces the item at the head of the list. 
+     * 
+     * Runs in O(1) time because we take advantage of the stored reference.
+     * */
     @Override
     public void setFirst(T item) {
-        this.insertFirst(item);
+        this.getHead().setItem(item);
     }
 
     /**
-     * Wraps a call to insertLast(). Does not replace the tail, but is added after it and promoted.
+     * Replaces the item at the tail of the list.
+     * 
+     * Runs in O(1) time because we take advantage of the stored reference.
      */
     @Override
     public void setLast(T item) {
-        this.insertLast(item);
+        this.getTail().setItem(item);
     }
 
     /**
-     * Removes the node at position idx from the list. Runs in around O(n) time on average I 
-     * suppose because we walk the list. Can't use the iterator here because we need to 
-     * touch the actual node :-(
+     * Removes the node at position idx from the list, and adjusts the pointers of its neighbors. 
+     * 
+     * Runs in O(n) because we have to walk the list. 
      */
     @Override
     public void deleteAt(int idx) {
@@ -196,8 +247,9 @@ public class LinkedList<T> implements SequenceInterface<T>, DynamicArrayInterfac
     }
 
     /** 
-     * Removes the node at the front of the list, and promotes the 2nd node to head. Runs in O(1) 
-     * time because we had the foresight to store a reference to the front of the list. 
+     * Removes the node at the front of the list, and promotes the 2nd node to head. 
+     * 
+     * Runs in O(1) time because we take advantage of the stored rerference to the head of the list.
      */
     @Override
     public void deleteFirst() {
@@ -206,8 +258,9 @@ public class LinkedList<T> implements SequenceInterface<T>, DynamicArrayInterfac
     }
 
     /** 
-     * Removes the node at the back of the list, and promotes the second-to-last node to tail. Runs 
-     * in O(1) time because we had the foresight to store a reference to the last node in the list. 
+     * Removes the node at the back of the list, and promotes the second-to-last node to tail. 
+     * 
+     * Runs in O(1) time because we take advantage of the stored reference to the tail of the list.
      */
     @Override
     public void deleteLast() {
@@ -217,9 +270,9 @@ public class LinkedList<T> implements SequenceInterface<T>, DynamicArrayInterfac
 
     /**
      * Creates a new node containing item and stores it at position idx within the LinkedList. Does 
-     * not replace the node at that position, but rather moves it down the list. Runs in O(n) time 
-     * because we have to walk the list. The actual insert consists of three O(1) operations and 
-     * are therefore insignificant here.
+     * not replace the node at that position, but rather moves it down the list. 
+     * 
+     * Runs in O(n) time because we have to walk the list.
      */
     @Override
     public void insertAt(int idx, T item) {
@@ -227,7 +280,7 @@ public class LinkedList<T> implements SequenceInterface<T>, DynamicArrayInterfac
         if (idx > this.count - 1) {
             throw new ArrayIndexOutOfBoundsException();
         }
-        // if index == 0, just call this.insertFirst() no need to repeat the logic here
+        // if index == 0, just call this.insertFirst() no need to repeat the logic here.
         if (idx == 0) {
             this.insertFirst(item);
         }
@@ -239,7 +292,6 @@ public class LinkedList<T> implements SequenceInterface<T>, DynamicArrayInterfac
         // we start at the head, of course.
         LinkedListNode<T> current = this.head;
 
-        // move first, THEN act.
         int counter = 0;
         while (counter != idx) {
             current = current.getNext();
@@ -264,8 +316,9 @@ public class LinkedList<T> implements SequenceInterface<T>, DynamicArrayInterfac
     }
 
     /** 
-     * Creates a new node containing item and puts it at the front of the list. Runs in O(1) time 
-     * because we don't need to walk the list.
+     * Creates a new node containing item and puts it at the front of the list. 
+     * 
+     * Runs in O(1) time because we take advantage of the stored reference to the head of the list.
      */
     @Override
     public void insertFirst(T item) {
@@ -277,8 +330,9 @@ public class LinkedList<T> implements SequenceInterface<T>, DynamicArrayInterfac
     }
 
     /** 
-     * Creates a new node containing item and puts it at the back of the list. Runs in O(1) time 
-     * because we don't need to walk the list.
+     * Creates a new node containing item and puts it at the back of the list. 
+     * 
+     * Runs in O(1) time because we take advantage of the stored reference to the tail of the list.
      */
     @Override
     public void insertLast(T item) {
