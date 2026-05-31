@@ -99,12 +99,11 @@ public class DynamicArray<T> implements
     }
 
     /**
-     * Inserts 'item' at position 'x' in the array. Does not overwrite existing item, but instead 
-     * shifts all items from array[x] onwards forward by one space.
+     * Inserts 'item' at position 'x' in the array, overwriting the original. 
      */
     @Override
     public void setAt(int x, T item) {
-        this.insertAt(x, item);
+        this.internal.setAt(x, item);
     }
 
     /**
