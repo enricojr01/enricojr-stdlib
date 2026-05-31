@@ -76,8 +76,8 @@ public class LinkedList<T> implements
      * 
      * @param head
      */
-    public void setHead(LinkedListNode<T> head) {
-        this.head = head;
+    public void setHead(T head) {
+        this.head.setItem(head);
     }
 
     /**
@@ -97,8 +97,8 @@ public class LinkedList<T> implements
      * 
      * @param tail
      */
-    public void setTail(LinkedListNode<T> tail) {
-        this.tail = tail;
+    public void setTail(T tail) {
+        this.tail.setItem(tail);
     }
 
     /** 
@@ -136,7 +136,7 @@ public class LinkedList<T> implements
      * 
      * Runs in O(1) time because the class stores a reference to the head that is updated as needed.
      */
-    private T getFirst() {
+    public T getFirst() {
         return head.getItem();
     }
 
@@ -146,7 +146,7 @@ public class LinkedList<T> implements
      * 
      * Runs in O(1) time because the class stores a reference to the tail that is updated as needed.
      */
-    private T getLast() {
+    public T getLast() {
         return tail.getItem();
     }
 
@@ -322,9 +322,14 @@ public class LinkedList<T> implements
     @Override
     public void insertFirst(T item) {
         LinkedListNode<T> node = new LinkedListNode<T>(item);
-        node.setNext(this.head);
-        this.head.setPrev(node);
-        this.head = node;
+        if (this.head == null) {
+            this.head = node;
+            this.tail = node;
+        } else {
+            node.setNext(this.head); 
+            this.head.setPrev(node);
+            this.head = node;
+        }
         this.count += 1;
     }
 
@@ -336,9 +341,14 @@ public class LinkedList<T> implements
     @Override
     public void insertLast(T item) {
         LinkedListNode<T> node = new LinkedListNode<T>(item);
-        node.setPrev(this.tail);
-        this.tail.setNext(node);
-        this.tail = node;
+        if (this.head == null && this.tail == null) {
+            this.head = node;
+            this.tail = node;
+        } else {
+            node.setPrev(this.tail);
+            this.tail.setNext(node);
+            this.tail = node;
+        }
         this.count += 1;
     }
 

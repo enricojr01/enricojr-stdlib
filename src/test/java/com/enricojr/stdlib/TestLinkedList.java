@@ -1,8 +1,10 @@
 package com.enricojr.stdlib;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.ArrayList;
+import java.util.stream.IntStream;
 import org.junit.jupiter.api.Test;
 import com.enricojr.stdlib.sequences.LinkedList;
 
@@ -73,4 +75,16 @@ public class TestLinkedList {
         // i.e temp should have 5 items
         assertEquals(5, temp.size());
     }
+
+    @Test
+    public void testLinkedListFromScratch() {
+        LinkedList<Integer> lli = new LinkedList<>();
+        IntStream.range(1, 15).forEach(a -> lli.insertLast(a));
+
+        assertEquals(1, lli.getFirst());
+        assertEquals(3, lli.getAt(2));
+        assertEquals(14, lli.getLast());
+
+    }
+
 }

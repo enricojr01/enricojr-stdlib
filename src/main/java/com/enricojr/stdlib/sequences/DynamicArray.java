@@ -15,27 +15,33 @@ public class DynamicArray<T> implements
     // the array itself
     private StaticArray<T> internal;
 
+
     /**
      * The dynamic array is an array that automatically resizes itself as it fills up. It 
      * overallocates on initialization to enable O(1) .insertAt and .insertLast(), and when enough
-     * items have been removed from the array, it will shrink to maintain space efficiency.
+     * items have been removed from the array, it will shrink to maintain space efficiency.<br/>
      * 
      * On initialization, if args.length is less than 16, an internal array with 16 slots will be 
      * created. This is the minimum number of slots a dynamic array can have and it will go no 
-     * lower.
+     * lower.<br/>
      *
      * Each time an insert / remove is performed, the loadFactor will be calculated (according to 
      * this.itemCount / this.internal.len()) and checked against the growFactor (default 0.75f) or 
      * shrinkFactor (default 0.25f) respectively. itemCount is incremented pre-emptively, and if 
      * the resulting loadFactor meets and exceeds or meets and falls below the respective 
-     * growFactor/shrinkFactor, a resize is triggered.
+     * growFactor/shrinkFactor, a resize is triggered.<br/>
      * 
      * On resize, a new internal array will be allocated with (this.itemCount * 2) spaces. 
      * Depending on when this is called it will result in an array that is larger than or smaller 
-     * than the current.
+     * than the current.<br/>
      * 
      * @param args
      */
+    public DynamicArray() {
+        // shoudl have no fewer than 16 slots
+        this.internal = new StaticArray<T>(16);
+    }
+
     public DynamicArray(T... args) {
         int totalSpaces = 0;
         if (args.length < 16) {
