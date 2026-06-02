@@ -1,5 +1,7 @@
 package com.enricojr.stdlib.interfaces;
 
+import com.enricojr.stdlib.exceptions.ItemNotFoundException;
+
 public interface SetInterface<T extends Comparable<T>> {
     int len();
     T find(T item);
