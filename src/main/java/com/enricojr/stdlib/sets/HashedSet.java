@@ -45,7 +45,7 @@ public class HashedSet<T extends Comparable<T>>
 
             @Override
             public boolean hasNext() {
-                if (this.idxPtr != HashedSet.this.internal.length - 1) {
+                if (this.idxPtr != HashedSet.this.internal.length) {
                     return true;
                 }
                 return false;
@@ -119,6 +119,8 @@ public class HashedSet<T extends Comparable<T>>
         return null;
     }
 
+    // NOTE: The .hashCode() of an integer is the integer itself.
+    // NOTE: int % 5 will be 0 for everything that ends in 5. >_<
     /**
      * Inserts an item into the set. Runs in O(1) time.
      */
