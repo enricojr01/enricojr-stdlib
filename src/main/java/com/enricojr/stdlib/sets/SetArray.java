@@ -17,8 +17,8 @@ public class SetArray<T extends Comparable<T>> implements SetInterface<T>, Itera
      * 
      * @param args
      */
-    public SetArray(T... args) {
-        this.internal = new DynamicArray<T>(args);
+    public SetArray(Class<T> type, T[] args) {
+        this.internal = new DynamicArray<T>(type, args);
         this.sort();
     }
 

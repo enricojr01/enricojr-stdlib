@@ -30,7 +30,7 @@ public class LinkedList<T> implements
      * 
      * @param an array of type T as Java varargs.
      */
-    public LinkedList(T... args) {
+    public LinkedList(T[] args) {
         LinkedListNode<T> current = null;
         for (T item : args) {
             if (this.head == null) {
@@ -322,7 +322,7 @@ public class LinkedList<T> implements
     @Override
     public void insertFirst(T item) {
         LinkedListNode<T> node = new LinkedListNode<T>(item);
-        if (this.head == null) {
+        if (this.head == null && this.tail == null) {
             this.head = node;
             this.tail = node;
         } else {

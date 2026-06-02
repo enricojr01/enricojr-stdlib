@@ -8,6 +8,7 @@ public class DynamicArray<T> implements
     StaticSequenceInterface<T>, DynamicSequenceInterface<T>, Iterable<T> {
     private float growFactor = 0.75f;
     private float shrinkFactor = 0.25f;
+    private Class<T> internalType;
 
     // how many items are actually in it
     private int itemCount;
@@ -15,6 +16,11 @@ public class DynamicArray<T> implements
     // the array itself
     private StaticArray<T> internal;
 
+    public DynamicArray(Class<T> type) {
+        // shoudl have no fewer than 16 slots
+        this.internal = new StaticArray<T>(type, 16);
+        this.internalType = type;
+    }
 
     /**
      * The dynamic array is an array that automatically resizes itself as it fills up. It 
@@ -37,12 +43,7 @@ public class DynamicArray<T> implements
      * 
      * @param args
      */
-    public DynamicArray() {
-        // shoudl have no fewer than 16 slots
-        this.internal = new StaticArray<T>(16);
-    }
-
-    public DynamicArray(T... args) {
+    public DynamicArray(Class<T> type, T[] args) {
         int totalSpaces = 0;
         if (args.length < 16) {
             // no fewer than 16 slots.
@@ -52,7 +53,8 @@ public class DynamicArray<T> implements
             totalSpaces = args.length * 2;
         }
 
-        this.internal = new StaticArray<T>(totalSpaces);
+        this.internal = new StaticArray<T>(type, totalSpaces);
+        this.internalType = type;
 
         for (int i = 0; i < args.length; i++) {
             this.internal.setAt(i, args[i]);
@@ -77,7 +79,7 @@ public class DynamicArray<T> implements
      */
     @Override
     public StaticSequenceIterator<T> iterator() {
-        return new StaticSequenceIterator<>(this);
+        return new StaticSequenceIterator<T>(this);
     }
 
     /**
@@ -213,8 +215,7 @@ public class DynamicArray<T> implements
             newArraySize = 16;
         }
     
-        // TODO: Find a way to guard against this, otherwise suppress the warning.
-        StaticArray<T> newArray = new StaticArray(newArraySize);
+        StaticArray<T> newArray = new StaticArray<>(this.internalType, newArraySize);
 
         for (int i = 0; i < this.itemCount; i++) {
             newArray.setAt(i, this.internal.getAt(i));

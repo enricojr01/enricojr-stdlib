@@ -9,5 +9,4 @@ public interface SetInterface<T extends Comparable<T>> {
     T findMax();
     T findNext(T item);
     T findPrev(T item);
-    void sort();
 }

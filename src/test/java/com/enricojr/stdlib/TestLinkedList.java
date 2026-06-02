@@ -84,7 +84,37 @@ public class TestLinkedList {
         assertEquals(1, lli.getFirst());
         assertEquals(3, lli.getAt(2));
         assertEquals(14, lli.getLast());
-
     }
 
+    @Test
+    public void testLinkedListInsertFirstEmpty() {
+        LinkedList<Integer> lli = new LinkedList<>();
+        lli.insertFirst(324);
+        assertEquals(324, lli.getFirst());
+        assertEquals(324, lli.getLast());
+    }
+
+    @Test
+    public void testLinkedListInsertLastEmpty() {
+        LinkedList<Integer> lli = new LinkedList<>();
+        lli.insertLast(123);
+        lli.insertLast(514);
+        lli.insertLast(3932);
+        lli.insertLast(2345);
+        assertEquals(2345, lli.getLast());
+        assertEquals(123, lli.getFirst());
+        assertEquals(514, lli.getAt(1));
+    }
+
+    @Test
+    public void testLinkedListInsertFirstRepeatedly() {
+        LinkedList<Integer> lli = new LinkedList<>();
+        // list should look like 999, 500, 424;
+        lli.insertFirst(424);
+        lli.insertFirst(500);
+        lli.insertFirst(999);
+        assertEquals(999, lli.getFirst());
+        assertEquals(500, lli.getAt(1));
+        assertEquals(424, lli.getLast());
+    }
 }

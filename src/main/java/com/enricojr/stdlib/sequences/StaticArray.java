@@ -1,5 +1,6 @@
 package com.enricojr.stdlib.sequences;
 
+import java.lang.reflect.Array;
 import com.enricojr.stdlib.interfaces.StaticSequenceInterface;
 import com.enricojr.stdlib.iterators.StaticSequenceIterator;
 
@@ -13,8 +14,23 @@ public class StaticArray<T> implements StaticSequenceInterface<T>, Iterable<T> {
      * Constructor takes an array of T items as varargs and prepopulates the the array. 
      * @param args
      */
-    public StaticArray(T... args) {
-        this.internal = (T[]) new Object[args.length];
+    /**
+     * NOTE: Casting Object[] to T[] is unsafe because there's no way for compiler to guarantee
+    * that the Object[] actually contains T[]. The correct way to do this is to create an array
+    * of the correct type via reflection:
+    * 
+    *     Array.newInstance(String.class, size)
+    * 
+    * Where String.class is replaced with the appropriate class.
+    * 
+    * T[] is erased at runtime by the compiler and becomes Object[], thus casting Object[] to T[]
+    * will succeed regardless of whatever is in the Object[] array, and errors will only appear
+    * at runtime when elements are accessed. There is no way for the compiler to guarantee that
+    * an Object[] actually contains anything of type T.
+    */   
+    @SuppressWarnings("unchecked")
+    public StaticArray(Class<T> type, T[] args) {
+        this.internal = (T[]) Array.newInstance(type, args.length);
 
         for (int i = 0; i < args.length; i++) {
             this.internal[i] = args[i];
@@ -26,8 +42,9 @@ public class StaticArray<T> implements StaticSequenceInterface<T>, Iterable<T> {
      * Operates by creating an Object[] array and casting it to T[].
      * @param length
      */
-    public StaticArray(int length) {
-        this.internal = (T[]) new Object[length];
+    @SuppressWarnings("unchecked")
+    public StaticArray(Class<T> type, int length) {
+        this.internal = (T[]) Array.newInstance(type, length);
     }
 
     /**
