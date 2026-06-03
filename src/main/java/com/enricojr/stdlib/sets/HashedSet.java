@@ -13,7 +13,8 @@ import com.enricojr.stdlib.sequences.LinkedListNode;
  * can't have order on it's own because hashing distributes values into buckets in a random, 
  * unpredictable fashion.
  * 
- * Order needs to be determined and maintained some other way (radix sort?)
+ * Order needs to be determined and maintained some other way (radix sort?), maybe I should move
+ * on to trees and revisit this one later.
  * 
  * This resembles Python's set() which is just a dictionary with only keys, and the only real
  * advantage that it offers is O(1) lookup time, and O(1) insert.

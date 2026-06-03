@@ -1,6 +1,9 @@
 package com.enricojr.stdlib.sequences;
 
 public class BinaryTreeNode<T> {
+
+    // the number of nodes in this node's subtree.
+    private int size;
     private BinaryTreeNode<T> parent;
     private BinaryTreeNode<T> leftChild;
     private BinaryTreeNode<T> rightChild;
