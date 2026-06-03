@@ -250,4 +250,39 @@ public class DynamicArray<T> implements
 
         return sb.toString();
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((internalType == null) ? 0 : internalType.hashCode());
+        result = prime * result + itemCount;
+        result = prime * result + ((internal == null) ? 0 : internal.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        // TODO: fix unchecked cast
+        DynamicArray<T> other = (DynamicArray<T>) obj;
+        if (internalType == null) {
+            if (other.internalType != null)
+                return false;
+        } else if (!internalType.equals(other.internalType))
+            return false;
+        if (itemCount != other.itemCount)
+            return false;
+        if (internal == null) {
+            if (other.internal != null)
+                return false;
+        } else if (!internal.equals(other.internal))
+            return false;
+        return true;
+    }
 }

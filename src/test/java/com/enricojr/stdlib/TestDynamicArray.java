@@ -1,6 +1,8 @@
 package com.enricojr.stdlib;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.ArrayList;
 import java.util.stream.IntStream;
 import org.junit.jupiter.api.Test;
@@ -96,4 +98,49 @@ public class TestDynamicArray {
         }
         assertEquals(results.size(), dai.len());
     }
+
+    @Test
+    public void testDyanmicArrayEquals() {
+        DynamicArray<Integer> dai1 = new DynamicArray<>(
+            Integer.class, new Integer[]{1, 2, 3, 4, 5}
+        );
+        DynamicArray<Integer> dai2 = new DynamicArray<>(
+            Integer.class, new Integer[]{1, 2, 3, 4, 5}
+        );
+
+        assertTrue(dai2.equals(dai1));
+    }
+
+    @Test
+    public void testDynamicArrayNotEquals() {
+        DynamicArray<Integer> dai1 = new DynamicArray<>(
+            Integer.class, new Integer[]{1, 2, 3, 4}
+        );
+        DynamicArray<Integer> dai2 = new DynamicArray<>(
+            Integer.class, new Integer[]{1, 2, 3, 4, 5}
+        );
+
+        assertFalse(dai2.equals(dai1));
+    }
+
+    @Test
+    public void testDynamicArrayNotEqualsNull() {
+        DynamicArray<Integer> dai1 = new DynamicArray<>(
+            Integer.class, new Integer[]{1, 2, 3, 4}
+        );
+
+        assertFalse(dai1.equals(null));
+    }
+
+    @SuppressWarnings("unlikely-arg-type")
+    @Test
+    public void testDynamicArrayNotEqualsOther() {
+        DynamicArray<Integer> dai1 = new DynamicArray<>(
+            Integer.class, new Integer[]{1, 2, 3, 4}
+        );
+
+        String testStr = "this is not an array";
+        assertFalse(dai1.equals(testStr));
+    }
+
 }

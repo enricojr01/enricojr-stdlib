@@ -65,6 +65,7 @@ public class TestStaticArray {
         assertFalse(sai1.equals(null));
     }
 
+    @SuppressWarnings("unlikely-arg-type")
     @Test
     public void testStaticArrayEqualsOtherClass() {
         StaticArray<Integer> sai1 = new StaticArray<>(Integer.class, new Integer[]{1, 2, 3, 4, 5});

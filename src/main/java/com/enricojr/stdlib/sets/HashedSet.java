@@ -6,7 +6,18 @@ import java.util.Iterator;
 import java.util.Objects;
 import com.enricojr.stdlib.interfaces.SetInterface;
 import com.enricojr.stdlib.sequences.LinkedList;
+import com.enricojr.stdlib.sequences.LinkedListNode;
 
+/**
+ * TODO: Revisit this whole class - a "set" as defined in the material is _ordered_ but this
+ * can't have order on it's own because hashing distributes values into buckets in a random, 
+ * unpredictable fashion.
+ * 
+ * Order needs to be determined and maintained some other way (radix sort?)
+ * 
+ * This resembles Python's set() which is just a dictionary with only keys, and the only real
+ * advantage that it offers is O(1) lookup time, and O(1) insert.
+ */
 public class HashedSet<T extends Comparable<T>> 
     implements SetInterface<T>, Iterable<LinkedList<T>> {
     private LinkedList<T>[] internal;
@@ -68,8 +79,21 @@ public class HashedSet<T extends Comparable<T>>
 
     @Override
     public T delete(T item) {
-        // TODO Auto-generated method stub
-        return null;
+        int bucketNumber = this.universalHash(item.hashCode(), this.internal.length);
+        LinkedList<T> chain = this.internal[bucketNumber];
+
+        int ptr = 0;
+        LinkedListNode<T> node = chain.getHead();
+        while (ptr != chain.len()) {
+            if (item.equals(node.getItem())) {
+                break;
+            }
+            node = node.getNext();
+            ptr += 1;
+        }
+
+        chain.deleteAt(ptr);
+        return node.getItem();
     }
 
     /** 
@@ -96,28 +120,25 @@ public class HashedSet<T extends Comparable<T>>
         return target;
     }
 
+    // TODO: re-think the interface. This is basically MapInterface with <K> instead of <K, V>
     @Override
     public T findMax() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public T findMin() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public T findNext(T item) {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public T findPrev(T item) {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     // NOTE: The .hashCode() of an integer is the integer itself.
@@ -127,7 +148,7 @@ public class HashedSet<T extends Comparable<T>>
      */
     @Override
     public void insert(T item) {
-        int bucketNumber = Objects.hashCode(item) % this.internal.length;
+        int bucketNumber = this.universalHash(item.hashCode(), this.internal.length);
         LinkedList<T> chain;
         try {
             chain = this.internal[bucketNumber];
@@ -137,6 +158,7 @@ public class HashedSet<T extends Comparable<T>>
             LinkedList<T> newChain = new LinkedList<T>();
             newChain.insertLast(item);
             this.internal[bucketNumber] = newChain;
+            this.itemCount += 1;
             this.chainCount += 1;
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("lol wtf happened here?");
@@ -146,8 +168,7 @@ public class HashedSet<T extends Comparable<T>>
 
     @Override
     public int len() {
-        // TODO Auto-generated method stub
-        return 0;
+        return this.itemCount;
     }
 
     public String toString() {
@@ -196,5 +217,22 @@ public class HashedSet<T extends Comparable<T>>
             return false;
         return true;
     }
-    
+
+    /** 
+     * An approximation of a universal hash function. Just using item.hashCode() is not sufficient 
+     * because for stuff like Integers the hashCode() of an Integer is the Integer itself, and that 
+     * does not make for an even distribution across buckets.
+     * 
+     * The test `TestHashedSet.testStaticLinkedListArrayIteration()` instantiates an array of 9999
+     * integers and inserts them into a HashedSet, the resulting distribution basically has each    * element in its own bucket (i.e. 9999 buckets each with 1 element). I think that means it's 
+     * working.
+     */
+    private int universalHash(int itemHashCode, int length) {
+        final int prime1 = 31;
+        final int prime2 = 47;
+        final int prime3 = Integer.MAX_VALUE;
+        int result = 1;
+        result = ((prime1 * itemHashCode + prime2) % prime3) % length;
+        return result;
+    }
 }

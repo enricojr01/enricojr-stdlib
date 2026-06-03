@@ -70,17 +70,6 @@ public class StaticArray<T> implements StaticSequenceInterface<T>, Iterable<T> {
         return this.internal.length;
     }
 
-    /**
-     * Returns the internal array of type T[] because I can't implement SetArray otherwise. Now 
-     * that this no longer implements SequenceInterface I cant use the SequenceIterator for it. 
-     * Don't quite know if that was the right choice or not.
-     * 
-     * @return
-     */
-    public T[] getArray() {
-        return this.internal;
-    }
-
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("StaticArray[");
