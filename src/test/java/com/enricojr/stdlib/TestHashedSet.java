@@ -1,6 +1,7 @@
 package com.enricojr.stdlib;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -28,5 +29,21 @@ public class TestHashedSet {
         HashedSet<Integer> set = new HashedSet<>(Integer.class, new Integer[]{65, 55, 35, 45, 25});
         System.out.println(set);
         assertTrue(true);
+    }
+
+    @Test
+    public void testStaticArrayLinkedListEquality() {
+        HashedSet<Integer> set1 = new HashedSet<>(Integer.class, new Integer[]{65, 55, 35, 45, 25});
+        HashedSet<Integer> set2 = new HashedSet<>(Integer.class, new Integer[]{65, 55, 35, 45, 25});
+
+        assertTrue(set1.equals(set2));
+    }
+
+    @Test
+    public void testStaticArrayLinkedListInequality() {
+        HashedSet<Integer> set1 = new HashedSet<>(Integer.class, new Integer[]{65, 55, 35, 25});
+        HashedSet<Integer> set2 = new HashedSet<>(Integer.class, new Integer[]{65, 55, 35, 45, 25});
+
+        assertFalse(set1.equals(set2));
     }
 }

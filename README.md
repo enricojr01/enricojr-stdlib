@@ -135,7 +135,7 @@ should shift remaining elements backwards (to the left) by one place, to close t
 Depending on the backing store (linked list vs static array), this inserts / deletes can be as fast 
 as O(1).
 
-# TODO: MOVE THIS SECTION TO THE IMPLEMENTATION DOCS, NOT THE INTERFACE
+# TODO: MOVE THIS SECTION OUT OF THE README,
 All insert and delete methods will trigger a resize of the array when necessary, according to the 
 following criteria:
 

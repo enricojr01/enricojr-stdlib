@@ -1,7 +1,7 @@
 package com.enricojr.stdlib;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.ArrayList;
 import java.util.stream.IntStream;
@@ -116,5 +116,38 @@ public class TestLinkedList {
         assertEquals(999, lli.getFirst());
         assertEquals(500, lli.getAt(1));
         assertEquals(424, lli.getLast());
+    }
+
+    @Test
+    public void testLinkedListEquality() {
+        LinkedList<Integer> lli1 = new LinkedList<>(new Integer[]{12, 34, 55, 64, 24, 99});
+        LinkedList<Integer> lli2 = new LinkedList<>(new Integer[]{12, 34, 55, 64, 24, 99});
+
+        assertEquals(lli2, lli1);
+    }
+
+    @Test
+    public void testLinkedListInequality() {
+        LinkedList<Integer> lli1 = new LinkedList<>(new Integer[]{12, 34, 55, 64, 24, 99});
+        LinkedList<Integer> lli2 = new LinkedList<>(new Integer[]{12, 34, 55, 64, 55});
+
+        assertNotEquals(lli1, lli2);
+    }
+
+    @Test
+    public void testLinkedListHashCodeInequality() {
+        LinkedList<Integer> lli1 = new LinkedList<>(new Integer[]{12, 34, 55, 64, 24, 99});
+        LinkedList<Integer> lli2 = new LinkedList<>(new Integer[]{12, 34, 55, 64, 55});
+
+        assertNotEquals(lli1.hashCode(), lli2.hashCode());
+
+    }
+
+    @Test
+    public void testLinkedListHashCodeEquality() {
+        LinkedList<Integer> lli1 = new LinkedList<>(new Integer[]{12, 34, 55, 64, 24, 99});
+        LinkedList<Integer> lli2 = new LinkedList<>(new Integer[]{12, 34, 55, 64, 24, 99});
+
+        assertEquals(lli2.hashCode(), lli1.hashCode());
     }
 }

@@ -1,6 +1,7 @@
 package com.enricojr.stdlib;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import com.enricojr.stdlib.sequences.StaticArray;
@@ -41,5 +42,40 @@ public class TestStaticArray {
         }
         System.out.println();
         assertTrue(true);
+    }
+
+    @Test
+    public void testStaticArrayEquals() {
+        StaticArray<Integer> sai1 = new StaticArray<>(Integer.class, new Integer[]{1, 2, 3, 4, 5});
+        StaticArray<Integer> sai2 = new StaticArray<>(Integer.class, new Integer[]{1, 2, 3, 4, 5});
+
+        assertTrue(sai1.equals(sai2));
+    }
+
+    @Test
+    public void testStaticArrayEqualsItself() {
+        StaticArray<Integer> sai1 = new StaticArray<>(Integer.class, new Integer[]{1, 2, 3, 4, 5});
+
+        assertTrue(sai1.equals(sai1));
+    }
+
+    @Test
+    public void testStaticArrayEqualsNull() {
+        StaticArray<Integer> sai1 = new StaticArray<>(Integer.class, new Integer[]{1, 2, 3, 4, 5});
+        assertFalse(sai1.equals(null));
+    }
+
+    @Test
+    public void testStaticArrayEqualsOtherClass() {
+        StaticArray<Integer> sai1 = new StaticArray<>(Integer.class, new Integer[]{1, 2, 3, 4, 5});
+        assertFalse(sai1.equals(new int[]{1, 2, 4, 2}));
+    }
+
+    @Test
+    public void testStaticArrayNotEquals() {
+        StaticArray<Integer> sai1 = new StaticArray<>(Integer.class, new Integer[]{1, 2, 3, 4, 5});
+        StaticArray<Integer> sai2 = new StaticArray<>(Integer.class, new Integer[]{1, 2, 3, 4});
+
+        assertFalse(sai1.equals(sai2));
     }
 }

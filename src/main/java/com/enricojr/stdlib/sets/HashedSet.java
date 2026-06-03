@@ -1,6 +1,7 @@
 package com.enricojr.stdlib.sets;
 
 import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Objects;
 import com.enricojr.stdlib.interfaces.SetInterface;
@@ -165,4 +166,35 @@ public class HashedSet<T extends Comparable<T>>
         return sb.toString();
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + Arrays.hashCode(internal);
+        result = prime * result + defaultLength;
+        result = prime * result + itemCount;
+        result = prime * result + chainCount;
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        HashedSet<T> other = (HashedSet<T>) obj;
+        if (!Arrays.equals(internal, other.internal))
+            return false;
+        if (defaultLength != other.defaultLength)
+            return false;
+        if (itemCount != other.itemCount)
+            return false;
+        if (chainCount != other.chainCount)
+            return false;
+        return true;
+    }
+    
 }
