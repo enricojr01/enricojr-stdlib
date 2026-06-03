@@ -63,6 +63,10 @@ public class DynamicArray<T> implements
         this.itemCount = args.length;
     }
 
+    public DynamicArray(Class<T> type, StaticArray<T> args) {
+
+    }
+
     /**
      * Returns the size of the internal static array. Will always be greater than the value 
      * returned by len(). Made available only for debugging / inspection purposes shouldn't need to 
@@ -284,5 +288,11 @@ public class DynamicArray<T> implements
         } else if (!internal.equals(other.internal))
             return false;
         return true;
+    }
+
+    public DynamicArray<T> slice(int start, int end) {
+        // NOTE: this is probably going to be kinda slow.
+        StaticArray<T> newArray = this.internal.slice(start, end);
+        return new DynamicArray<T>(this.internalType, newArray);
     }
 }

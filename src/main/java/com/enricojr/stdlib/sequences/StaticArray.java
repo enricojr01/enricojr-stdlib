@@ -7,6 +7,7 @@ import com.enricojr.stdlib.iterators.StaticSequenceIterator;
 
 public class StaticArray<T> implements StaticSequenceInterface<T>, Iterable<T> {
     private T[] internal;
+    private Class<T> internalType;
 
     /**
      * A simple wrapper around Java's built-in static arrays. The wrapper implements the provided 
@@ -18,6 +19,7 @@ public class StaticArray<T> implements StaticSequenceInterface<T>, Iterable<T> {
     @SuppressWarnings("unchecked")
     public StaticArray(Class<T> type, T[] args) {
         this.internal = (T[]) Array.newInstance(type, args.length);
+        this.internalType = type;
 
         for (int i = 0; i < args.length; i++) {
             this.internal[i] = args[i];
@@ -32,6 +34,7 @@ public class StaticArray<T> implements StaticSequenceInterface<T>, Iterable<T> {
     @SuppressWarnings("unchecked")
     public StaticArray(Class<T> type, int length) {
         this.internal = (T[]) Array.newInstance(type, length);
+        this.internalType = type;
     }
 
     /**
@@ -101,5 +104,10 @@ public class StaticArray<T> implements StaticSequenceInterface<T>, Iterable<T> {
         if (!Arrays.deepEquals(internal, other.internal))
             return false;
         return true;
+    }
+
+    public StaticArray<T> slice(int start, int end) {
+        T[] newArray = Arrays.copyOfRange(this.internal, start, end);
+        return new StaticArray<T>(this.internalType, newArray);
     }
 }

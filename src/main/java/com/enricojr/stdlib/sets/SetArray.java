@@ -87,6 +87,14 @@ public class SetArray<T extends Comparable<T>> implements SetInterface<T>, Itera
      */
     @Override
     public T find(T item) {
+        // int midPoint = Math.floorDiv(this.internal.len(), 2);
+        // T mid = this.internal.getAt(midPoint);
+        // if (item.compareTo(mid) == 0) {
+        //     return mid;
+        // } else if (item.compareTo(mid) > 0) {
+
+        // }
+
         for (T obj: this) {
             if (item.compareTo(obj) == 0) {
                 return obj;
@@ -94,6 +102,11 @@ public class SetArray<T extends Comparable<T>> implements SetInterface<T>, Itera
         }
         return null;
     }
+
+    // private T binarySearch(T item, int start, int end) {
+    //     int midPoint = Math.floorDiv()
+    //     if ()
+    // }
 
     /**
      * Returns the largest element in the set. 
