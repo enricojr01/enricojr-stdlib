@@ -17,7 +17,7 @@ public class DynamicArray<T> implements
     private StaticArray<T> internal;
 
     public DynamicArray(Class<T> type) {
-        // shoudl have no fewer than 16 slots
+        // should have no fewer than 16 slots
         this.internal = new StaticArray<T>(type, 16);
         this.internalType = type;
     }
@@ -111,6 +111,20 @@ public class DynamicArray<T> implements
     }
 
     /**
+     * Returns the item at the first position in the array.
+     */
+    public T getFirst() {
+        return this.internal.getAt(0);
+    }
+
+    /**
+     * Returns the item at the last position in the array.
+     */
+    public T getLast() {
+        return this.internal.getAt(this.itemCount);
+    }
+
+    /**
      * Inserts 'item' at position 'x' in the array, overwriting the original. 
      */
     @Override
@@ -146,6 +160,7 @@ public class DynamicArray<T> implements
      */
     @Override
     public void insertLast(T item) {
+        // TODO: Double check this, it might be wrong.
         this.insertAt(this.itemCount, item);
     }
 
@@ -294,5 +309,9 @@ public class DynamicArray<T> implements
         // NOTE: this is probably going to be kinda slow.
         StaticArray<T> newArray = this.internal.slice(start, end);
         return new DynamicArray<T>(this.internalType, newArray);
+    }
+
+    public Class<T> getInternalType() {
+        return internalType;
     }
 }

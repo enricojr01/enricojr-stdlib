@@ -37,6 +37,12 @@ public class StaticArray<T> implements StaticSequenceInterface<T>, Iterable<T> {
         this.internalType = type;
     }
 
+    @SuppressWarnings("unchecked")
+    public StaticArray(Class<T> type) {
+        this.internal = (T[]) Array.newInstance(type, 16);
+        this.internalType = type;
+    }
+
     /**
      * Returns an iterator that allows StaticArray to be used with the enhanced "for" syntax 
      * provided by Java.

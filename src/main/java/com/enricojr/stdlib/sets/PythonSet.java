@@ -3,31 +3,27 @@ package com.enricojr.stdlib.sets;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.Objects;
 import com.enricojr.stdlib.interfaces.SetInterface;
 import com.enricojr.stdlib.sequences.LinkedList;
 import com.enricojr.stdlib.sequences.LinkedListNode;
 
 /**
- * TODO: Revisit this whole class - a "set" as defined in the material is _ordered_ but this
- * can't have order on it's own because hashing distributes values into buckets in a random, 
- * unpredictable fashion.
- * 
- * Order needs to be determined and maintained some other way (radix sort?), maybe I should move
- * on to trees and revisit this one later.
  * 
  * This resembles Python's set() which is just a dictionary with only keys, and the only real
  * advantage that it offers is O(1) lookup time, and O(1) insert.
+ * 
+ * NOTE: if you need something that has fast lookups AND cares about order use a BST.
+ * 
+ * TODO: change resize algorithm to measure m (items stored) / n (number of buckets).
+ * TODO: change constructor to initialize fixed number of buckets (16) rather than based on args.length
  */
-public class HashedSet<T extends Comparable<T>> 
+public class PythonSet<T extends Comparable<T>> 
     implements SetInterface<T>, Iterable<LinkedList<T>> {
     private LinkedList<T>[] internal;
 
     // Both are completely arbitrary values right now, can't see any reason to make one or the other
     // a specific size.
     private final int defaultLength = 16;
-    // private final int maxChainLength = 7;
-
     // as in, the number of items in the set
     private int itemCount;
     // as in, the number of chains that have been instantiated and have one or more in it.
@@ -38,19 +34,22 @@ public class HashedSet<T extends Comparable<T>>
      * must implement Comparable<T> to be used with this data structure.
      */
     @SuppressWarnings("unchecked")
-    public HashedSet(Class<T> type) {
+    public PythonSet(Class<T> type) {
         this.internal = (LinkedList<T>[]) Array.newInstance(LinkedList.class, this.defaultLength);
     }
 
+    // TODO: needs to be redone - does not measure load factor or take it into account, creating
+    // an array matching args.length kinda removes the need for buckets since everything
+    // would fit into a spot.
+    // NOTE: Load Factor = n / m where n is the number of entries and the m the number of buckets.
     @SuppressWarnings("unchecked")
-    public HashedSet(Class<T> type, T[] args) {
+    public PythonSet(Class<T> type, T[] args) {
         this.internal = (LinkedList<T>[]) Array.newInstance(LinkedList.class, args.length);
         for (T item : args) {
             this.insert(item);
         }
     }
 
-    // TODO: some of the items returned here end up being null. fix/dont fix? idk
     public Iterator<LinkedList<T>> iterator() {
         // NOTE: am I just overcomplicating this? Maybe not work so late.
         return new Iterator<LinkedList<T>>() {
@@ -58,7 +57,7 @@ public class HashedSet<T extends Comparable<T>>
 
             @Override
             public boolean hasNext() {
-                if (this.idxPtr != HashedSet.this.internal.length) {
+                if (this.idxPtr != PythonSet.this.internal.length) {
                     return true;
                 }
                 return false;
@@ -68,7 +67,7 @@ public class HashedSet<T extends Comparable<T>>
             public LinkedList<T> next() {
                 LinkedList<T> chain = null;
                 try {
-                    chain = HashedSet.this.internal[idxPtr];
+                    chain = PythonSet.this.internal[idxPtr];
                 } catch (NullPointerException e) {
                     // do nothing?
                 }
@@ -106,7 +105,7 @@ public class HashedSet<T extends Comparable<T>>
      */
     @Override
     public T find(T item) {
-        int bucketNumber = Objects.hashCode(item) % this.internal.length;
+        int bucketNumber = this.universalHash(item.hashCode(), this.internal.length);
         T target = null;
         try {
             LinkedList<T> chain = this.internal[bucketNumber];
@@ -175,7 +174,7 @@ public class HashedSet<T extends Comparable<T>>
     public String toString() {
         String indent = "-";
         StringBuilder sb = new StringBuilder();
-        sb.append("HashedSet[\n");
+        sb.append("PythonSet[\n");
         for (LinkedList<T> chain : this) {
             if (chain != null) {
                 sb.append(indent.repeat(2) + chain + "\n");
@@ -207,7 +206,7 @@ public class HashedSet<T extends Comparable<T>>
             return false;
         if (getClass() != obj.getClass())
             return false;
-        HashedSet<T> other = (HashedSet<T>) obj;
+        PythonSet<T> other = (PythonSet<T>) obj;
         if (!Arrays.equals(internal, other.internal))
             return false;
         if (defaultLength != other.defaultLength)

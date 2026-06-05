@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.stream.IntStream;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import com.enricojr.stdlib.sets.HashedSet;
+import com.enricojr.stdlib.sets.PythonSet;
 
-public class TestHashedSet {
+public class TestPythonSet {
     private static Integer[] intArray;
 
     @BeforeAll
@@ -29,7 +29,7 @@ public class TestHashedSet {
 
     @Test
     public void testStaticArrayLinkedListGoodFind() {
-        HashedSet<Integer> set = new HashedSet<>(Integer.class, new Integer[]{65, 55, 35, 45, 25});
+        PythonSet<Integer> set = new PythonSet<>(Integer.class, new Integer[]{65, 55, 35, 45, 25});
         Integer i = set.find(55);
         assertNotNull(i);
         assertEquals(55, i);
@@ -37,31 +37,38 @@ public class TestHashedSet {
 
     @Test 
     public void testStaticArrayLinkedListBadFind() {
-        HashedSet<Integer> set = new HashedSet<>(Integer.class, new Integer[]{65, 55, 35, 45, 25});
+        PythonSet<Integer> set = new PythonSet<>(Integer.class, new Integer[]{65, 55, 35, 45, 25});
         Integer i = set.find(99);
         assertNull(i);
     }
 
     @Test
     public void testStaticArrayLinkedListIteration() {
-        HashedSet<Integer> set = new HashedSet<>(Integer.class, this.intArray);
+        PythonSet<Integer> set = new PythonSet<>(Integer.class, intArray);
         System.out.println(set);
         assertTrue(true);
     }
 
     @Test
     public void testStaticArrayLinkedListEquality() {
-        HashedSet<Integer> set1 = new HashedSet<>(Integer.class, new Integer[]{65, 55, 35, 45, 25});
-        HashedSet<Integer> set2 = new HashedSet<>(Integer.class, new Integer[]{65, 55, 35, 45, 25});
+        PythonSet<Integer> set1 = new PythonSet<>(Integer.class, new Integer[]{65, 55, 35, 45, 25});
+        PythonSet<Integer> set2 = new PythonSet<>(Integer.class, new Integer[]{65, 55, 35, 45, 25});
 
         assertTrue(set1.equals(set2));
     }
 
     @Test
     public void testStaticArrayLinkedListInequality() {
-        HashedSet<Integer> set1 = new HashedSet<>(Integer.class, new Integer[]{65, 55, 35, 25});
-        HashedSet<Integer> set2 = new HashedSet<>(Integer.class, new Integer[]{65, 55, 35, 45, 25});
+        PythonSet<Integer> set1 = new PythonSet<>(Integer.class, new Integer[]{65, 55, 35, 25});
+        PythonSet<Integer> set2 = new PythonSet<>(Integer.class, new Integer[]{65, 55, 35, 45, 25});
 
         assertFalse(set1.equals(set2));
+    }
+
+    @Test
+    public void testPythonSetDuplicates() {
+        PythonSet<Integer> set1 = new PythonSet<>(Integer.class, new Integer[]{2, 2, 3, 4});
+        System.out.println(set1);
+
     }
 }
