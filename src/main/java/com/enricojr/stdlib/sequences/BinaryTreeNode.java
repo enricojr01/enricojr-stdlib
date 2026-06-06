@@ -15,6 +15,7 @@ public class BinaryTreeNode<T> {
         this.internalType = type;
     }
 
+    // GETTERS AND SETTERS
     public BinaryTreeNode<T> getParent() {
         return parent;
     }
@@ -51,6 +52,121 @@ public class BinaryTreeNode<T> {
         return this.internalType;
     }
 
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    // TRAVERSAL
+    // NOTE: Seems like in-order traversal needs to be handled by some outside mechanism
+    //       the method presented in the notes requires Python's "yield" which doesn't quite exist
+    //       in Java.
+    /**
+     * Returns the node that occurs first in the tree's traversal order.
+     * 
+     * @return
+     */
+    public BinaryTreeNode<T> subtreeFirst() {
+        if (this.getLeftChild() != null) {
+            return this.getLeftChild().subtreeFirst();
+        } else {
+            // NOTE: will this even work?
+            // NOTE: recursive stuff can be confusing
+            return this;
+        }
+    }
+
+    /**
+     * Returns the node that occurs last in the tree's traversal order.
+     * 
+     * @return
+     */
+    public BinaryTreeNode<T> subtreeLast() {
+        if (this.getRightChild() != null) {
+            return this.getRightChild().subtreeLast();
+        } else {
+            return this;
+        }
+    }
+
+    /**
+     * Returns the node that comes after this one in the traversal order.
+     * 
+     * @return
+     */
+    public BinaryTreeNode<T> successor() {
+        // if the current node has a right child, its successor is the first node in traversal
+        // order in the right subtree.
+        if (this.getRightChild() != null) {
+            return this.getRightChild().subtreeFirst();
+        }
+
+        // otherwise find the lowest ancestor of the current node such that the current node
+        // is in the left subtree.
+        // NOTE: I don't quite wrap my head around how this works but OK.
+        BinaryTreeNode<T> current = this;
+        while (current.getParent() != null && current.getParent().getRightChild().equals(this)) {
+            current = current.getParent();
+        }
+
+        return current.parent;
+    }
+
+    /**
+     * Returns the node that comes before this one in the traversal order.
+     * 
+     * @return
+     */
+    public BinaryTreeNode<T> predecessor() {
+        if (this.getLeftChild() != null) {
+            return this.getLeftChild().subtreeLast();
+        }
+
+        BinaryTreeNode<T> current = this;
+        while (current.getParent() != null && current.getParent().getLeftChild().equals(this)) {
+            current = current.getParent();
+        }
+
+        return current.getParent();
+    }
+
+    // INSERTION
+    /**
+     * Inserts node `item` before the current node, in traversal order.
+     * 
+     * @param item
+     */
+    public void subtreeInsertBefore(BinaryTreeNode<T> item) {
+        if (this.getLeftChild() != null)  {
+            BinaryTreeNode<T> last = this.getLeftChild().subtreeLast();
+            item.setParent(last);
+            last.setRightChild(item);
+        } else {
+            item.setParent(this);
+            this.setLeftChild(item);
+        }
+    }
+
+    /**
+     * Inserts node `item` after the current node, in traversal order.
+     * 
+     * @param item
+     */
+    public void subtreeInsertAfter(BinaryTreeNode<T> item) {
+        if (this.getRightChild() != null) {
+            BinaryTreeNode<T> first = this.getRightChild().subtreeFirst();
+            item.setParent(first);
+            first.setLeftChild(item);
+        } else {
+            item.setParent(this);
+            this.setRightChild(item);
+        }
+    }
+
+    // META
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("BinaryTreeNode[");
@@ -69,14 +185,6 @@ public class BinaryTreeNode<T> {
         int result = 1;
         result = prime * result + ((item == null) ? 0 : item.hashCode());
         return result;
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
     }
 
     @Override

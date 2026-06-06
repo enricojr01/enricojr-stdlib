@@ -1,24 +1,22 @@
 package com.enricojr.stdlib.iterators;
 
 import java.util.Iterator;
-import com.enricojr.stdlib.sequences.BinaryTree;
 import com.enricojr.stdlib.sequences.BinaryTreeNode;
 import com.enricojr.stdlib.sequences.DynamicArray;
 
 public class BinaryTreeIterator<T> implements Iterator<T> {
-    private BinaryTree<T> tree;
+    private BinaryTreeNode<T> start;
     private DynamicArray<T> stack;
     private int pointer;
 
-    public BinaryTreeIterator(BinaryTree<T> tree) {
-        this.tree = tree;
-        this.stack = new DynamicArray<>(this.tree.getRoot().getInternalType());
-        this.treeWalk(this.tree.getRoot());
+    public BinaryTreeIterator(Class<T> type, BinaryTreeNode<T> start) {
+        this.start = start;
+        this.stack = new DynamicArray<>(type);
+        this.walk(this.start);
     }
 
     @Override
     public boolean hasNext() {
-        // TODO Auto-generated method stub
         if (this.pointer < this.stack.len()) {
             return true;
         }
@@ -27,21 +25,20 @@ public class BinaryTreeIterator<T> implements Iterator<T> {
 
     @Override
     public T next() {
-        // TODO Auto-generated method stub
         T item = this.stack.getAt(this.pointer);
         this.pointer += 1;
-
         return item;
     }
 
-    private void treeWalk(BinaryTreeNode<T> start) {
+    private void walk(BinaryTreeNode<T> start) {
         if (start.getLeftChild() != null) {
-            this.treeWalk(start.getLeftChild());
+            this.walk(start.getLeftChild());
         }
+
         this.stack.insertLast(start.getItem());
+
         if (start.getRightChild() != null) {
-            this.treeWalk(start.getRightChild());
+            this.walk(start.getRightChild());
         }
     }
-
 }
