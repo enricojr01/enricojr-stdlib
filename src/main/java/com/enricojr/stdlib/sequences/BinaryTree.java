@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import com.enricojr.stdlib.interfaces.SetInterface;
 import com.enricojr.stdlib.iterators.BinaryTreeIterator;
-import com.enricojr.stdlib.sets.SetArray;
+import com.enricojr.stdlib.sorters.InsertionSorter;
 
 public class BinaryTree<T extends Comparable<T>> implements SetInterface<T>, Iterable<T> {
     // NOTE: The root of the tree lacks a parent.
@@ -18,27 +18,27 @@ public class BinaryTree<T extends Comparable<T>> implements SetInterface<T>, Ite
     }
 
     public BinaryTree(Class<T> type, T[] items) {
-        // FIXME: pick a different sequence type.
-        SetArray<T> sorted = new SetArray<T>(type, items);
-        sorted.sort();
         this.internalType = type;
 
-        int middleIndex = Math.floorDiv(sorted.len(), 2);
+        // NOTE: Step 1 - find the mean of the array
+        // TODO: this could be better optimized, maybe consider adding a sorter to the base array
+        StaticArray<T> temp = new StaticArray<>(type, items);
+        InsertionSorter<T> is = new InsertionSorter<>(items);
+        is.sort();
+        StaticArray<T> sorted = new StaticArray<>(type, is.getInternal());
 
-        // slice it up
-        // T middleElement = sorted.getAt(middleIndex);
-        // T[] bigger = Arrays.copyOfRange(sorted, middleIndex, sorted.length - 1);
-        // T[] smaller = Arrays.copyOfRange(sorted, 0, middleIndex);
+        // NOTE: Step 2 - extract the middle element and make it the root.
+        int middleIdx = Math.floorDiv(sorted.len(), 2);
+        BinaryTreeNode<T> midElement = new BinaryTreeNode<T>(type, sorted.getAt(middleIdx));
+        this.root = midElement;
 
-        // TODO: Build the tree, starting from the middle element.
-        // this.root = new BinaryTreeNode<T>(type, middleElement);
-        // for (T item : smaller) {
-        //     this.insert(item);
-        // }
-        // for (T item : bigger) {
-        //     this.insert(item);
-        // }
-
+        for (int i = 0; i < sorted.len(); i++) {
+            if (i == middleIdx) {
+                continue;
+            } else {
+                this.insert(sorted.getAt(i));
+            }
+        }
     }
 
     public Iterator<T> iterator() { 
@@ -106,9 +106,11 @@ public class BinaryTree<T extends Comparable<T>> implements SetInterface<T>, Ite
     }
 
     private void treeInsert(BinaryTreeNode<T> start, BinaryTreeNode<T> newNode) {
-        if (start.getItem().compareTo(newNode.getItem()) < 0) {
+        T val1 = start.getItem();
+        T val2 = newNode.getItem();
+        if (val2.compareTo(val1) < 0) {
             if (start.getLeftChild() != null) {
-                this.treeInsert(start.getLeftChild(), newNode);
+                this.treeInsert(root.getLeftChild(), newNode);
             } else {
                 start.subtreeInsertBefore(newNode);
             }
@@ -124,10 +126,8 @@ public class BinaryTree<T extends Comparable<T>> implements SetInterface<T>, Ite
     // META
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("BinaryTree[");
-        for (T item : this) {
-            sb.append(item + ", ");
-        }
+        sb.append("BinaryTree[\n");
+        sb.append(this.root.toString());
         sb.append("]");
         return sb.toString();
     }
