@@ -30,4 +30,5 @@ public class InsertionSorter<T extends Comparable<T>> {
             this.internal[i] = temp;
         }
     }
+    
 }

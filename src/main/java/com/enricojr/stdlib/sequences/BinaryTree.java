@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import com.enricojr.stdlib.interfaces.SetInterface;
 import com.enricojr.stdlib.iterators.BinaryTreeIterator;
-import com.enricojr.stdlib.sorters.InsertionSorter;
+import com.enricojr.stdlib.sets.SetArray;
 
 public class BinaryTree<T extends Comparable<T>> implements SetInterface<T>, Iterable<T> {
     // NOTE: The root of the tree lacks a parent.
@@ -18,25 +18,26 @@ public class BinaryTree<T extends Comparable<T>> implements SetInterface<T>, Ite
     }
 
     public BinaryTree(Class<T> type, T[] items) {
-        InsertionSorter<T> sorter = new InsertionSorter<T>(items);
+        // FIXME: pick a different sequence type.
+        SetArray<T> sorted = new SetArray<T>(type, items);
+        sorted.sort();
         this.internalType = type;
 
-        T[] sorted = sorter.getInternal();
-        int middleIndex = Math.floorDiv(sorted.length, 2);
+        int middleIndex = Math.floorDiv(sorted.len(), 2);
 
         // slice it up
-        T middleElement = sorted[middleIndex];
-        T[] bigger = Arrays.copyOfRange(sorted, middleIndex, sorted.length - 1);
-        T[] smaller = Arrays.copyOfRange(sorted, 0, middleIndex);
+        // T middleElement = sorted.getAt(middleIndex);
+        // T[] bigger = Arrays.copyOfRange(sorted, middleIndex, sorted.length - 1);
+        // T[] smaller = Arrays.copyOfRange(sorted, 0, middleIndex);
 
         // TODO: Build the tree, starting from the middle element.
-        this.root = new BinaryTreeNode<T>(type, middleElement);
-        for (T item : smaller) {
-            this.insert(item);
-        }
-        for (T item : bigger) {
-            this.insert(item);
-        }
+        // this.root = new BinaryTreeNode<T>(type, middleElement);
+        // for (T item : smaller) {
+        //     this.insert(item);
+        // }
+        // for (T item : bigger) {
+        //     this.insert(item);
+        // }
 
     }
 

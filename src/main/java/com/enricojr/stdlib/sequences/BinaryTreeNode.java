@@ -167,18 +167,6 @@ public class BinaryTreeNode<T> {
     }
 
     // META
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("BinaryTreeNode[");
-        sb.append(
-            this.parent.toString() + ", " + 
-            this.leftChild.toString() + ", " + 
-            this.rightChild.toString()
-        );
-        sb.append("]");
-        return sb.toString();
-    }
-
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -204,4 +192,24 @@ public class BinaryTreeNode<T> {
             return false;
         return true;
     }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        this.print(sb, "", "");
+        return sb.toString();
+    }
+
+    private void print(StringBuilder buffer, String prefix, String childrenPrefix) {
+        buffer.append(prefix);
+        buffer.append(this.getItem());
+        buffer.append("\n");
+
+        if (this.getLeftChild() != null) {
+            this.getLeftChild().print(buffer, childrenPrefix + "|--", childrenPrefix + "|  ");
+        }
+        if (this.getRightChild() != null) {
+            this.getRightChild().print(buffer, childrenPrefix + "|_ " , childrenPrefix + "     ");
+        }
+    }
+
 }
