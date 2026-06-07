@@ -69,14 +69,12 @@ public class BinaryTree<T extends Comparable<T>> implements SetInterface<T>, Ite
 
     @Override
     public T findMax() {
-        // TODO Auto-generated method stub
-        return null;
+        return this.root.subtreeLast().getItem();
     }
 
     @Override
     public T findMin() {
-        // TODO Auto-generated method stub
-        return null;
+        return this.root.subtreeFirst().getItem();
     }
 
     @Override
