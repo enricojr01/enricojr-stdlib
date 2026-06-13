@@ -142,8 +142,10 @@ public class BinaryTreeNode<T extends Comparable<T>> {
         }
 
         BinaryTreeNode<T> current = this;
-        while (current.getParent() != null && current.getParent().getLeftChild().equals(this)) {
-            current = current.getParent();
+        while (current.getParent() != null && current.getParent().getLeftChild() != null)  {
+            if (current.getParent().getLeftChild().equals(this)) {
+                current = current.getParent();
+            }
         }
 
         return current.getParent();
