@@ -1,23 +1,26 @@
-package com.enricojr.stdlib.sequences;
+package com.enricojr.stdlib.sets;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import com.enricojr.stdlib.interfaces.SetInterface;
 import com.enricojr.stdlib.iterators.BinaryTreeIterator;
+import com.enricojr.stdlib.sequences.StaticArray;
 import com.enricojr.stdlib.sorters.InsertionSorter;
 
-public class BinaryTree<T extends Comparable<T>> implements SetInterface<T>, Iterable<T> {
+public class BinarySearchTree<T extends Comparable<T>> implements SetInterface<T>, Iterable<T> {
     // NOTE: The root of the tree lacks a parent.
     // NOTE: A node having no children is a leaf.
+    // NOTE: Should I consider differentiating between a simple binary tree that doesn't impose 
+    // order and one that does? 
     private BinaryTreeNode<T> root;
     private Class<T> internalType;
+    private int itemCount;
 
-    public BinaryTree(Class<T> type, T item) {
+    public BinarySearchTree(Class<T> type, T item) {
         this.root = new BinaryTreeNode<T>(type, item);
         this.internalType = type;
     }
 
-    public BinaryTree(Class<T> type, T[] items) {
+    public BinarySearchTree(Class<T> type, T[] items) {
         this.internalType = type;
 
         // NOTE: Step 1 - find the mean of the array
@@ -57,14 +60,23 @@ public class BinaryTree<T extends Comparable<T>> implements SetInterface<T>, Ite
     // SET INTERFACE METHODS
     @Override
     public T delete(T item) {
-        // TODO Auto-generated method stub
-        return null;
+        BinaryTreeNode<T> node = this.treeFind(this.root, item);
+        BinaryTreeNode<T> result = null;
+        if (node != null) {
+            result = node.subtreeDelete();
+        }
+        return result.getItem();
     }
 
     @Override
     public T find(T item) {
-        // TODO Auto-generated method stub
-        return null;
+        // return this.treeFind(this.root, item).getItem();
+        BinaryTreeNode<T> node = this.root.subtreeFind(item);
+        if (node != null)  {
+            return node.getItem();
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -79,13 +91,21 @@ public class BinaryTree<T extends Comparable<T>> implements SetInterface<T>, Ite
 
     @Override
     public T findNext(T item) {
-        // TODO Auto-generated method stub
+        BinaryTreeNode<T> node = this.root.subtreeFind(item);
+        if (node != null) {
+            return node.successor().getItem();
+        }
+
         return null;
     }
 
     @Override
     public T findPrev(T item) {
-        // TODO Auto-generated method stub
+        BinaryTreeNode<T> node = this.root.subtreeFind(item);
+        if (node != null) {
+            return node.predecessor().getItem();
+        }
+
         return null;
     }
 
@@ -95,12 +115,12 @@ public class BinaryTree<T extends Comparable<T>> implements SetInterface<T>, Ite
         // NOTE: items greater than or equal to a node will go on the right side
         BinaryTreeNode<T> newNode = new BinaryTreeNode<T>(this.internalType, item);
         this.treeInsert(this.root, newNode);
+        this.itemCount += 1;
     }
 
     @Override
     public int len() {
-        // TODO Auto-generated method stub
-        return 0;
+        return this.itemCount;
     }
 
     private void treeInsert(BinaryTreeNode<T> start, BinaryTreeNode<T> newNode) {
@@ -119,6 +139,22 @@ public class BinaryTree<T extends Comparable<T>> implements SetInterface<T>, Ite
                 start.subtreeInsertAfter(newNode);
             }
         }
+    }
+
+    private BinaryTreeNode<T> treeFind(BinaryTreeNode<T> start, T item) {
+        if (start.getItem().compareTo(item) == 0) {
+            return start;
+        } else if (item.compareTo(start.getItem()) < 0) { 
+            if (start.getLeftChild() != null) {
+                return this.treeFind(start.getLeftChild(), item);
+            }
+        } else if (item.compareTo(start.getItem()) > 0) {
+            if (start.getRightChild() != null) {
+                return this.treeFind(start.getRightChild(), item);
+            }
+        } 
+
+        return null;
     }
 
     // META

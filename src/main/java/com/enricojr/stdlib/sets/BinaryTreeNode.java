@@ -1,9 +1,10 @@
-package com.enricojr.stdlib.sequences;
+package com.enricojr.stdlib.sets;
 
-public class BinaryTreeNode<T> {
+public class BinaryTreeNode<T extends Comparable<T>> {
 
     // the number of nodes in this node's subtree.
     private int size;
+    private int height;
     private BinaryTreeNode<T> parent;
     private BinaryTreeNode<T> leftChild;
     private BinaryTreeNode<T> rightChild;
@@ -92,6 +93,21 @@ public class BinaryTreeNode<T> {
         }
     }
 
+    public BinaryTreeNode<T> subtreeFind(T item) {
+        if (item.compareTo(this.getItem()) == 0) {
+            return this;
+        } else if (item.compareTo(this.getItem()) < 0) {
+            if (this.getLeftChild() != null) {
+                return this.getLeftChild().subtreeFind(item);
+            }
+        } else if (item.compareTo(this.getItem()) > 0) {
+            if (this.getRightChild() != null) {
+                return this.getRightChild().subtreeFind(item);
+            }
+        }
+        return null;
+    }
+
     /**
      * Returns the node that comes after this one in the traversal order.
      * 
@@ -166,6 +182,36 @@ public class BinaryTreeNode<T> {
         }
     }
 
+    // DELETION
+    public BinaryTreeNode<T> subtreeDelete() {
+        // NOTE: Double check this later, but I think I got it right.
+        // If the node is not a leaf - swap its contents with its successor / predecessor until its
+        // in a leaf and delete.
+        // The actual finding of the node is handled by the tree class 
+        if (this.getLeftChild() != null || this.getRightChild() != null) {
+            BinaryTreeNode<T> target = null;
+            if (this.getLeftChild() != null) {
+                target = this.predecessor();
+            } else {
+                target = this.successor();
+            }
+            T temp = this.getItem();
+            this.setItem(target.getItem());
+            target.setItem(temp);
+            return target.subtreeDelete();
+        }
+        if (this.getParent() != null) {
+            BinaryTreeNode<T> leftChild = this.getParent().getLeftChild();
+            if (leftChild != null && leftChild.equals(this) ){
+                this.getParent().setLeftChild(null);
+            } else {
+                this.getParent().setRightChild(null);
+            }
+            // call to maintain here
+        }
+        return this;
+    }
+
     // META
     @Override
     public int hashCode() {
@@ -207,9 +253,9 @@ public class BinaryTreeNode<T> {
         if (this.getLeftChild() != null) {
             this.getLeftChild().print(buffer, childrenPrefix + "|--", childrenPrefix + "|  ");
         }
+
         if (this.getRightChild() != null) {
             this.getRightChild().print(buffer, childrenPrefix + "|_ " , childrenPrefix + "     ");
         }
     }
-
 }

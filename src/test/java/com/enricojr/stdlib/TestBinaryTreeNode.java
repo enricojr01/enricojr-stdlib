@@ -3,7 +3,7 @@ package com.enricojr.stdlib;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
-import com.enricojr.stdlib.sequences.BinaryTreeNode;
+import com.enricojr.stdlib.sets.BinaryTreeNode;
 
 public class TestBinaryTreeNode {
     @Test

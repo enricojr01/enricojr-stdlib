@@ -1,10 +1,10 @@
 package com.enricojr.stdlib.iterators;
 
 import java.util.Iterator;
-import com.enricojr.stdlib.sequences.BinaryTreeNode;
 import com.enricojr.stdlib.sequences.DynamicArray;
+import com.enricojr.stdlib.sets.BinaryTreeNode;
 
-public class BinaryTreeIterator<T> implements Iterator<T> {
+public class BinaryTreeIterator<T extends Comparable<T>> implements Iterator<T> {
     private BinaryTreeNode<T> start;
     private DynamicArray<T> stack;
     private int pointer;
