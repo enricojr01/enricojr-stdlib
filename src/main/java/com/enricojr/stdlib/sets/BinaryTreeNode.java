@@ -93,21 +93,6 @@ public class BinaryTreeNode<T extends Comparable<T>> {
         }
     }
 
-    public BinaryTreeNode<T> subtreeFind(T item) {
-        if (item.compareTo(this.getItem()) == 0) {
-            return this;
-        } else if (item.compareTo(this.getItem()) < 0) {
-            if (this.getLeftChild() != null) {
-                return this.getLeftChild().subtreeFind(item);
-            }
-        } else if (item.compareTo(this.getItem()) > 0) {
-            if (this.getRightChild() != null) {
-                return this.getRightChild().subtreeFind(item);
-            }
-        }
-        return null;
-    }
-
     /**
      * Returns the node that comes after this one in the traversal order.
      * 
@@ -124,11 +109,15 @@ public class BinaryTreeNode<T extends Comparable<T>> {
         // is in the left subtree.
         // NOTE: I don't quite wrap my head around how this works but OK.
         BinaryTreeNode<T> current = this;
-        while (current.getParent() != null && current.getParent().getRightChild().equals(this)) {
+        while (
+            current.getParent() != null 
+            && current.getParent().getRightChild() != null 
+            && current.getParent().getRightChild().equals(this)
+        ) {
             current = current.getParent();
         }
 
-        return current.parent;
+        return current.getParent();
     }
 
     /**
@@ -142,14 +131,65 @@ public class BinaryTreeNode<T extends Comparable<T>> {
         }
 
         BinaryTreeNode<T> current = this;
-        while (current.getParent() != null && current.getParent().getLeftChild() != null)  {
-            if (current.getParent().getLeftChild().equals(this)) {
-                current = current.getParent();
-            }
+        while (
+            current.getParent() != null 
+            && current.getParent().getLeftChild() != null 
+            && current.getParent().getLeftChild().equals(this)
+        )  {
+            current = current.getParent();
         }
 
         return current.getParent();
     }
+
+    // SEARCH
+    // NOTE: Successor and Predecessor are not necessarily the next / previous nodes numerically!
+    public BinaryTreeNode<T> subtreeFind(T item) {
+        if (item.compareTo(this.getItem()) == 0) {
+            return this;
+        } else if (item.compareTo(this.getItem()) < 0) {
+            if (this.getLeftChild() != null) {
+                return this.getLeftChild().subtreeFind(item);
+            }
+        } else if (item.compareTo(this.getItem()) > 0) {
+            if (this.getRightChild() != null) {
+                return this.getRightChild().subtreeFind(item);
+            }
+        }
+        return null;
+    }
+
+    public BinaryTreeNode<T> subtreeNext(T item) {
+        if (this.getItem().compareTo(item) <= 0) {
+            if (this.getRightChild() != null) {
+                return this.getRightChild().subtreeNext(item);
+            } else {
+                return null;
+            }
+        } else if (this.getLeftChild() != null) {
+            BinaryTreeNode<T> target = this.getLeftChild().subtreeNext(item);
+            if (target != null) {
+                return target;
+            } 
+        } 
+        return this;
+    }
+
+    public BinaryTreeNode<T> subtreePrev(T item) {
+        if (this.getItem().compareTo(item) >= 0) {
+            if (this.getLeftChild() != null)  {
+                return this.getLeftChild().subtreePrev(item);
+            } else {
+                return null;
+            }
+        } else if (this.getRightChild() != null) {
+            BinaryTreeNode<T> target = this.getRightChild().subtreePrev(item);
+            if (target != null) {
+                return target;
+            } 
+        } 
+        return this;
+    } 
 
     // INSERTION
     /**
@@ -252,12 +292,12 @@ public class BinaryTreeNode<T extends Comparable<T>> {
         buffer.append(this.getItem());
         buffer.append("\n");
 
-        if (this.getLeftChild() != null) {
-            this.getLeftChild().print(buffer, childrenPrefix + "|--", childrenPrefix + "|  ");
+        if (this.getRightChild() != null) {
+            this.getRightChild().print(buffer, childrenPrefix + "|--", childrenPrefix + "|  ");
         }
 
-        if (this.getRightChild() != null) {
-            this.getRightChild().print(buffer, childrenPrefix + "|_ " , childrenPrefix + "     ");
+        if (this.getLeftChild() != null) {
+            this.getLeftChild().print(buffer, childrenPrefix + "|_ " , childrenPrefix + "    ");
         }
     }
 }

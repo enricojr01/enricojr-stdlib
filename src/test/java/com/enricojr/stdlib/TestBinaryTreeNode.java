@@ -1,6 +1,8 @@
 package com.enricojr.stdlib;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import com.enricojr.stdlib.sets.BinaryTreeNode;
@@ -104,6 +106,64 @@ public class TestBinaryTreeNode {
         BinaryTreeNode<Integer> last = root.subtreeLast();
         assertEquals(4096, last.getItem());
     }
+
+    @Test
+    public void testBinaryTreeSubtreeNext() {
+        Integer[] testArray = new Integer[]{256, 1024, 128, 64, 2048, 4096};
+        BinaryTreeNode<Integer> root = new BinaryTreeNode<>(Integer.class, 512);
+
+        for (Integer i : testArray) {
+            BinaryTreeNode<Integer> value = new BinaryTreeNode<Integer>(Integer.class, i);
+            this.binaryTreeInsert(root, value);
+        }
+
+        BinaryTreeNode<Integer> target = root.subtreeNext(64);
+        assertNotNull(target);
+        assertEquals(128, target.getItem());
+    }
+
+    @Test
+    public void testBinaryTreeSubtreeNextFail() {
+        Integer[] testArray = new Integer[]{256, 1024, 128, 64, 2048, 4096};
+        BinaryTreeNode<Integer> root = new BinaryTreeNode<>(Integer.class, 512);
+
+        for (Integer i : testArray) {
+            BinaryTreeNode<Integer> value = new BinaryTreeNode<Integer>(Integer.class, i);
+            this.binaryTreeInsert(root, value);
+        }
+
+        BinaryTreeNode<Integer> target = root.subtreeNext(4096);
+        assertNull(target);
+    }
+
+    @Test
+    public void testBinaryTreeSubtreePrev() {
+        Integer[] testArray = new Integer[]{256, 1024, 128, 64, 2048, 4096};
+        BinaryTreeNode<Integer> root = new BinaryTreeNode<>(Integer.class, 512);
+
+        for (Integer i : testArray) {
+            BinaryTreeNode<Integer> value = new BinaryTreeNode<Integer>(Integer.class, i);
+            this.binaryTreeInsert(root, value);
+        }
+
+        BinaryTreeNode<Integer> target = root.subtreePrev(256);
+        assertEquals(128, target.getItem());
+    }
+
+    @Test
+    public void testBinaryTreeSubtreePrevFail() {
+        Integer[] testArray = new Integer[]{256, 1024, 128, 64, 2048, 4096};
+        BinaryTreeNode<Integer> root = new BinaryTreeNode<>(Integer.class, 512);
+
+        for (Integer i : testArray) {
+            BinaryTreeNode<Integer> value = new BinaryTreeNode<Integer>(Integer.class, i);
+            this.binaryTreeInsert(root, value);
+        }
+
+        BinaryTreeNode<Integer> target = root.subtreePrev(64);
+        assertNull(target);
+    }
+
 
     private void binaryTreeInsert(BinaryTreeNode<Integer> root, BinaryTreeNode<Integer> item) {
         Integer val1 = root.getItem();

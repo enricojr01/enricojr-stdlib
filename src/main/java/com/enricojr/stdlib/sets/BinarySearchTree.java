@@ -91,28 +91,22 @@ public class BinarySearchTree<T extends Comparable<T>> implements SetInterface<T
 
     @Override
     public T findNext(T item) {
-        BinaryTreeNode<T> node = this.root.subtreeFind(item);
-        if (node != null) {
-            if (node.predecessor() != null) {
-                return node.successor().getItem();
-            }
+        BinaryTreeNode<T> target = this.root.subtreeNext(item);
+        if (target != null) {
+            return target.getItem();
+        } else {
+            return null;
         }
-
-        return null;
     }
 
     @Override
     public T findPrev(T item) {
-        // TODO: the nested if looks weird, find a fix for it later.
-        BinaryTreeNode<T> node = this.root.subtreeFind(item);
-        if (node != null) {
-            if (node.predecessor() != null) {
-                return node.predecessor().getItem();
-
-            }
+        BinaryTreeNode<T> target = this.root.subtreePrev(item);
+        if (target != null) {
+            return target.getItem();
+        } else {
+            return null;
         }
-
-        return null;
     }
 
     @Override

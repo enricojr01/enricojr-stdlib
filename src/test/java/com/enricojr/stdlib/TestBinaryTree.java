@@ -52,39 +52,6 @@ public class TestBinaryTree {
     }
 
     @Test
-    public void testBinaryTreeFindPrevious() {
-        Integer[] numbers = new Integer[]{15, 12, 22, 34, 26, 55};
-        BinarySearchTree<Integer> bti = new BinarySearchTree<>(Integer.class, numbers);
-        Integer i = bti.findPrev(34);
-        assertEquals(26, i);
-    }
-
-    @Test
-    public void testBinaryTreeFindPreviousFail() {
-        Integer[] numbers = new Integer[]{15, 12, 22, 34, 26, 55};
-        BinarySearchTree<Integer> bti = new BinarySearchTree<>(Integer.class, numbers);
-        Integer i = bti.findPrev(12);
-        assertNull(i);
-    }
-
-    @Test
-    public void testBinaryTreeFindNext() {
-        Integer[] numbers = new Integer[]{15, 12, 22, 34, 26, 55};
-        BinarySearchTree<Integer> bti = new BinarySearchTree<>(Integer.class, numbers);
-        Integer i = bti.findNext(34);
-        assertEquals(55, i);
-    }
-
-    @Test
-    public void testBinaryTreeFindNextFail() {
-        Integer[] numbers = new Integer[]{15, 12, 22, 34, 26, 55};
-        BinarySearchTree<Integer> bti = new BinarySearchTree<>(Integer.class, numbers);
-        Integer i = bti.findNext(55);
-        System.out.println(bti);
-        assertEquals(9999, i);
-    }
-
-    @Test
     public void testBinaryTreeDelete() {
         Integer[] numbers = new Integer[]{49, 22, 48, 35, 16};
         BinarySearchTree<Integer> bti = new BinarySearchTree<>(Integer.class, numbers);
