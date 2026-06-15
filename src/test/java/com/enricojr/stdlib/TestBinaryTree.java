@@ -34,6 +34,42 @@ public class TestBinaryTree {
     }
 
     @Test
+    public void testBinaryTreeFindNext() {
+        Integer[] numbers = new Integer[]{12, 13, 14};
+        BinarySearchTree<Integer> bti = new BinarySearchTree<>(Integer.class, numbers);
+
+        Integer i = bti.findNext(13);
+        assertEquals(14, i);
+    }
+
+    @Test
+    public void testBinaryTreeFindNextFail() {
+        Integer[] numbers = new Integer[]{12, 13, 14};
+        BinarySearchTree<Integer> bti = new BinarySearchTree<>(Integer.class, numbers);
+
+        Integer i = bti.findNext(14);
+        assertNull(i);
+    }
+
+    @Test
+    public void testBinaryFindPrev() {
+        Integer[] numbers = new Integer[]{12, 13, 14};
+        BinarySearchTree<Integer> bti = new BinarySearchTree<>(Integer.class, numbers);
+
+        Integer i = bti.findPrev(13);
+        assertEquals(12, i);
+    }
+
+    @Test
+    public void testBinaryFindPrevFail() {
+        Integer[] numbers = new Integer[]{12, 13, 14};
+        BinarySearchTree<Integer> bti = new BinarySearchTree<>(Integer.class, numbers);
+
+        Integer i = bti.findPrev(12);
+        assertNull(i);
+    }
+
+    @Test
     public void testBinaryTreeFindFail() {
         Integer[] numbers = new Integer[]{12, 13, 14};
         BinarySearchTree<Integer> bti = new BinarySearchTree<>(Integer.class, numbers);
