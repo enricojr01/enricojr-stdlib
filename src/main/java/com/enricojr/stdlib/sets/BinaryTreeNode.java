@@ -292,12 +292,12 @@ public class BinaryTreeNode<T extends Comparable<T>> {
         buffer.append(this.getItem());
         buffer.append("\n");
 
-        if (this.getRightChild() != null) {
-            this.getRightChild().print(buffer, childrenPrefix + "|--", childrenPrefix + "|  ");
+        if (this.getLeftChild() != null) {
+            this.getLeftChild().print(buffer, childrenPrefix + "|--", childrenPrefix + "|  ");
         }
 
-        if (this.getLeftChild() != null) {
-            this.getLeftChild().print(buffer, childrenPrefix + "|_ " , childrenPrefix + "    ");
+        if (this.getRightChild() != null) {
+            this.getRightChild().print(buffer, childrenPrefix + "|_ " , childrenPrefix + "    ");
         }
     }
 }

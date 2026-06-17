@@ -80,6 +80,38 @@ public class TestBinaryTreeNode {
     }
 
     @Test
+    public void testBinaryTreeNodeDeepSuccessor() {
+        Integer[] testArray = new Integer[]{256, 1024, 128, 64, 2048, 4096};
+        BinaryTreeNode<Integer> root = new BinaryTreeNode<>(Integer.class, 512);
+
+        for (Integer i : testArray) {
+            BinaryTreeNode<Integer> value = new BinaryTreeNode<Integer>(Integer.class, i);
+            this.binaryTreeInsert(root, value);
+        }
+
+        BinaryTreeNode<Integer> newRoot = root.subtreeFind(2048);
+        BinaryTreeNode<Integer> successor = newRoot.successor();
+        assertEquals(4096, successor.getItem());
+
+    }
+
+    @Test
+    public void testBinaryTreeNodeDeepSuccessorAgain() {
+        Integer[] testArray = new Integer[]{7, 15, 39, 28, 31, 48};
+        BinaryTreeNode<Integer> root = new BinaryTreeNode<>(Integer.class, 25);
+
+        for (Integer i : testArray) {
+            BinaryTreeNode<Integer> value = new BinaryTreeNode<Integer>(Integer.class, i);
+            this.binaryTreeInsert(root, value);
+        }
+
+        BinaryTreeNode<Integer> newRoot = root.subtreeFind(15);
+        BinaryTreeNode<Integer> successor = newRoot.successor();
+        assertEquals(25, successor.getItem());
+
+    }
+
+    @Test
     public void testBinaryTreeSubtreeFirst() {
         Integer[] testArray = new Integer[]{256, 1024, 128, 64, 2048, 4096};
         BinaryTreeNode<Integer> root = new BinaryTreeNode<>(Integer.class, 512);

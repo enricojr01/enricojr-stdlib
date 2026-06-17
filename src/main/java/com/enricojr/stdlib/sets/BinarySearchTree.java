@@ -60,7 +60,7 @@ public class BinarySearchTree<T extends Comparable<T>> implements SetInterface<T
     // SET INTERFACE METHODS
     @Override
     public T delete(T item) {
-        BinaryTreeNode<T> node = this.treeFind(this.root, item);
+        BinaryTreeNode<T> node = this.root.subtreeFind(item);
         BinaryTreeNode<T> result = null;
         if (node != null) {
             result = node.subtreeDelete();
@@ -139,22 +139,6 @@ public class BinarySearchTree<T extends Comparable<T>> implements SetInterface<T
                 start.subtreeInsertAfter(newNode);
             }
         }
-    }
-
-    private BinaryTreeNode<T> treeFind(BinaryTreeNode<T> start, T item) {
-        if (start.getItem().compareTo(item) == 0) {
-            return start;
-        } else if (item.compareTo(start.getItem()) < 0) { 
-            if (start.getLeftChild() != null) {
-                return this.treeFind(start.getLeftChild(), item);
-            }
-        } else if (item.compareTo(start.getItem()) > 0) {
-            if (start.getRightChild() != null) {
-                return this.treeFind(start.getRightChild(), item);
-            }
-        } 
-
-        return null;
     }
 
     // META
