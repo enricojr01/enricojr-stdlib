@@ -224,6 +224,46 @@ public class TestBinaryTreeNode {
         assertNull(target);
     }
 
+    @Test
+    public void testBinaryTreeRotateLeft() {
+        Integer[] testArray = new Integer[]{4, 3, 2, 6, 11, 18, 19, 22, 9, 14, 17, 20, 12};
+        BinaryTreeNode<Integer> root = new BinaryTreeNode<>(Integer.class, 7);
+
+        for (Integer i : testArray) {
+            BinaryTreeNode<Integer> value = new BinaryTreeNode<>(Integer.class, i);
+            this.binaryTreeInsert(root, value);
+        }
+
+        // System.out.println(root);
+        BinaryTreeNode<Integer> target = root.subtreeFind(11);
+        target.subtreeRotateLeft();
+        // System.out.println(root);
+
+        BinaryTreeNode<Integer> newTarget = root.subtreeFind(18);
+        assertEquals(root, newTarget.getParent());
+        assertEquals(target, newTarget.getLeftChild());
+    }
+
+    @Test
+    public void testBinaryTreeRotateRight() {
+        Integer[] testArray = new Integer[]{4, 3, 2, 6, 11, 18, 19, 22, 9, 14, 17, 20, 12};
+        BinaryTreeNode<Integer> root = new BinaryTreeNode<>(Integer.class, 7);
+
+        for (Integer i : testArray) {
+            BinaryTreeNode<Integer> value = new BinaryTreeNode<>(Integer.class, i);
+            this.binaryTreeInsert(root, value);
+        }
+
+        System.out.println(root);
+        BinaryTreeNode<Integer> target = root.subtreeFind(11);
+        target.subtreeRotateRight();
+        // System.out.println(root);
+
+        BinaryTreeNode<Integer> newTarget = root.subtreeFind(9);
+        assertEquals(root, newTarget.getParent());
+        assertEquals(target, newTarget.getRightChild());
+    }
+
 
     private void binaryTreeInsert(BinaryTreeNode<Integer> root, BinaryTreeNode<Integer> item) {
         Integer val1 = root.getItem();

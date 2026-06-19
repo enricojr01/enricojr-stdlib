@@ -14,6 +14,7 @@ import com.enricojr.stdlib.sequences.LinkedListNode;
  * 
  * NOTE: if you need something that has fast lookups AND cares about order use a BST.
  * 
+ * TODO: Redo this whole damned thing.
  * TODO: change resize algorithm to measure m (items stored) / n (number of buckets).
  * TODO: change constructor to initialize fixed number of buckets (16) rather than based on args.length
  */

@@ -61,6 +61,10 @@ public class BinaryTreeNode<T extends Comparable<T>> {
         this.size = size;
     }
 
+    public int getHeight() {
+        return this.height;
+    }
+
     // TRAVERSAL
     // NOTE: Seems like in-order traversal needs to be handled by some outside mechanism
     //       the method presented in the notes requires Python's "yield" which doesn't quite exist
@@ -206,6 +210,7 @@ public class BinaryTreeNode<T extends Comparable<T>> {
             item.setParent(this);
             this.setLeftChild(item);
         }
+        // this.maintain();
     }
 
     /**
@@ -222,6 +227,7 @@ public class BinaryTreeNode<T extends Comparable<T>> {
             item.setParent(this);
             this.setRightChild(item);
         }
+        // this.maintain();
     }
 
     // DELETION
@@ -252,6 +258,94 @@ public class BinaryTreeNode<T extends Comparable<T>> {
             // call to maintain here
         }
         return this;
+    }
+
+    // UPDATE / MAINTENANCE
+    public void subtreeRotateRight() {
+        if (this.getLeftChild() == null) {
+            // TODO: make a proper exception and use it here 
+            throw new ArrayIndexOutOfBoundsException();
+        }
+
+        BinaryTreeNode<T> left = this.getLeftChild();
+        BinaryTreeNode<T> leftRightNode = left.getRightChild();
+        this.setLeftChild(leftRightNode);
+
+        BinaryTreeNode<T> currentParent = this.getParent();
+        if (leftRightNode != null) {
+            leftRightNode.setParent(this);
+        }
+
+        left.setParent(currentParent);
+
+        if (this.equals(this.getParent().getRightChild())) {
+            left.getParent().setRightChild(left);
+        } else {
+            left.getParent().setLeftChild(left);
+        }
+
+        left.setRightChild(this);
+        this.setParent(left);
+
+
+    }
+
+    public void subtreeRotateLeft() {
+        if (this.getRightChild() == null) {
+            throw new ArrayIndexOutOfBoundsException();
+        }
+
+        // turn right child left subtree into current node's right subtree
+        BinaryTreeNode<T> right = this.getRightChild();
+        BinaryTreeNode<T> rightLeftNode = right.getLeftChild();
+        this.setRightChild(rightLeftNode);
+
+        // if right child left subtree isn't null
+        BinaryTreeNode<T> currentParent = this.getParent();
+        if (rightLeftNode != null) {
+            rightLeftNode.setParent(this);
+        }
+
+        // current node becomes right child's parent
+        // this should automatically null it out, i.e. make it
+        // the new root if current node was root.
+        right.setParent(currentParent);
+
+        // if current node was a left child, right child node
+        // becomes a left child
+        if (this.equals(this.getParent().getLeftChild())) {
+            right.getParent().setLeftChild(right);
+
+        // otherwise it becomes a right child
+        } else {
+            right.getParent().setRightChild(right);
+        }
+
+        right.setLeftChild(this);
+        this.setParent(right);
+    }
+
+    private void subtreeUpdate() {
+        this.height = 1 + Math.max(
+            this.getLeftChild().getHeight(), 
+            this.getRightChild().getHeight()
+        );
+    }
+
+    private int skew() {
+        return this.getRightChild().getHeight() - this.getLeftChild().getHeight();
+    }
+
+    private void maintain() {
+        this.rebalance();
+        this.subtreeUpdate();
+        if (this.getParent() != null) {
+            this.getParent().maintain();
+        }
+    }
+
+    private void rebalance() {
+
     }
 
     // META
