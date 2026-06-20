@@ -224,7 +224,7 @@ public class BinaryTreeNode<T extends Comparable<T>> {
             item.setParent(this);
             this.setLeftChild(item);
         }
-        this.maintain();
+        // this.maintain();
     }
 
     /**
@@ -241,7 +241,7 @@ public class BinaryTreeNode<T extends Comparable<T>> {
             item.setParent(this);
             this.setRightChild(item);
         }
-        this.maintain();
+        // this.maintain();
     }
 
 
@@ -287,17 +287,17 @@ public class BinaryTreeNode<T extends Comparable<T>> {
         BinaryTreeNode<T> leftRightNode = left.getRightChild();
         this.setLeftChild(leftRightNode);
 
-        BinaryTreeNode<T> currentParent = this.getParent();
         if (leftRightNode != null) {
             leftRightNode.setParent(this);
         }
 
+        BinaryTreeNode<T> currentParent = this.getParent();
         left.setParent(currentParent);
 
-        if (this.equals(this.getParent().getRightChild())) {
-            left.getParent().setRightChild(left);
+        if (currentParent != null && currentParent.getLeftChild().equals(this)) {
+            this.getParent().setLeftChild(left);
         } else {
-            left.getParent().setLeftChild(left);
+            this.getParent().setRightChild(left);
         }
 
         left.setRightChild(this);
@@ -316,24 +316,18 @@ public class BinaryTreeNode<T extends Comparable<T>> {
         this.setRightChild(rightLeftNode);
 
         // if right child left subtree isn't null
-        BinaryTreeNode<T> currentParent = this.getParent();
         if (rightLeftNode != null) {
             rightLeftNode.setParent(this);
         }
 
         // current node becomes right child's parent
-        // this should automatically null it out, i.e. make it
-        // the new root if current node was root.
+        BinaryTreeNode<T> currentParent = this.getParent();
         right.setParent(currentParent);
 
-        // if current node was a left child, right child node
-        // becomes a left child
-        if (this.equals(this.getParent().getLeftChild())) {
-            right.getParent().setLeftChild(right);
-
-        // otherwise it becomes a right child
-        } else {
-            right.getParent().setRightChild(right);
+        if (currentParent != null && this.getParent().getLeftChild().equals(this)) {
+            this.getParent().setLeftChild(right);
+        } else if (currentParent != null && this.getParent().getRightChild().equals(this)) {
+            this.getParent().setRightChild(right);
         }
 
         right.setLeftChild(this);
@@ -341,10 +335,22 @@ public class BinaryTreeNode<T extends Comparable<T>> {
     }
 
     private void subtreeUpdate() {
-        this.height = 1 + Math.max(
-            this.getLeftChild().getHeight(), 
-            this.getRightChild().getHeight()
-        );
+        int leftHeight;
+        int rightHeight;
+
+        if (this.getRightChild() == null) {
+            rightHeight = -1;
+        } else {
+            rightHeight = this.getRightChild().getHeight();
+        }
+
+        if (this.getLeftChild() == null) {
+            leftHeight = -1;
+        } else {
+            leftHeight = this.getLeftChild().getHeight();
+        }
+
+        this.height = 1 + Math.max(leftHeight, rightHeight);
 
         if (this.getLeftChild() != null) {
             this.size += this.getLeftChild().getSize();
@@ -438,7 +444,7 @@ public class BinaryTreeNode<T extends Comparable<T>> {
         }
 
         if (this.getRightChild() != null) {
-            this.getRightChild().print(buffer, childrenPrefix + "|_ " , childrenPrefix + "    ");
+            this.getRightChild().print(buffer, childrenPrefix + "|_ " , childrenPrefix + "   ");
         }
     }
 }

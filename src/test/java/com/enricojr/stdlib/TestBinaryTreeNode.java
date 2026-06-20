@@ -234,14 +234,36 @@ public class TestBinaryTreeNode {
             this.binaryTreeInsert(root, value);
         }
 
-        // System.out.println(root);
+        System.out.println(root);
         BinaryTreeNode<Integer> target = root.subtreeFind(11);
         target.subtreeRotateLeft();
-        // System.out.println(root);
+        System.out.println(root);
 
         BinaryTreeNode<Integer> newTarget = root.subtreeFind(18);
         assertEquals(root, newTarget.getParent());
         assertEquals(target, newTarget.getLeftChild());
+    }
+
+    @Test
+    public void testBinaryTreeRotateLeftOnRoot() {
+        Integer[] testArray = new Integer[]{4, 3, 2, 6, 11, 18, 19, 22, 9, 14, 17, 20, 12};
+        BinaryTreeNode<Integer> root = new BinaryTreeNode<>(Integer.class, 7);
+
+        for (Integer i : testArray) {
+            BinaryTreeNode<Integer> value = new BinaryTreeNode<>(Integer.class, i);
+            this.binaryTreeInsert(root, value);
+        }
+
+        // System.out.println(root);
+        // NOTE: following a rotate the root is no longer a root but a subtree instead.
+        // this is probably why most tree data structures keep an explicit reference to the root,
+        // and make sure to update it as we go along.
+        root.subtreeRotateLeft();
+        // System.out.println(root.getParent());
+
+        BinaryTreeNode<Integer> newTarget = root.getParent();
+        assertEquals(null, newTarget.getParent());
+        assertEquals(root, newTarget.getLeftChild());
     }
 
     @Test
@@ -257,11 +279,25 @@ public class TestBinaryTreeNode {
         System.out.println(root);
         BinaryTreeNode<Integer> target = root.subtreeFind(11);
         target.subtreeRotateRight();
-        // System.out.println(root);
+        System.out.println(root);
 
         BinaryTreeNode<Integer> newTarget = root.subtreeFind(9);
         assertEquals(root, newTarget.getParent());
         assertEquals(target, newTarget.getRightChild());
+    }
+
+    @Test
+    public void testBinaryTreeBalancing() {
+        Integer[] testArray = new Integer[]{4, 3, 2, 6, 11, 18, 19, 22, 9, 14, 17, 20, 12};
+        BinaryTreeNode<Integer> root = new BinaryTreeNode<>(Integer.class, 7);
+
+        for (Integer i : testArray) {
+            BinaryTreeNode<Integer> value = new BinaryTreeNode<>(Integer.class, i);
+            this.binaryTreeInsert(root, value);
+        }
+        
+        System.out.println(root);
+
     }
 
 
