@@ -193,7 +193,21 @@ public class BinaryTreeNode<T extends Comparable<T>> {
             } 
         } 
         return this;
-    } 
+    }
+
+    public BinaryTreeNode<T> subtreeAt(int index) {
+        if (index < 0) {
+            throw new ArrayIndexOutOfBoundsException();
+        }
+        int leftSize = 0;
+        if (index < leftSize) {
+            return this.getLeftChild().subtreeAt(index);
+        } else if (index > leftSize) {
+            return this.getRightChild().subtreeAt(index - leftSize - 1);
+        } else {
+            return this;
+        }
+    }
 
     // INSERTION
     /**
@@ -210,7 +224,7 @@ public class BinaryTreeNode<T extends Comparable<T>> {
             item.setParent(this);
             this.setLeftChild(item);
         }
-        // this.maintain();
+        this.maintain();
     }
 
     /**
@@ -227,8 +241,9 @@ public class BinaryTreeNode<T extends Comparable<T>> {
             item.setParent(this);
             this.setRightChild(item);
         }
-        // this.maintain();
+        this.maintain();
     }
+
 
     // DELETION
     public BinaryTreeNode<T> subtreeDelete() {
@@ -255,7 +270,8 @@ public class BinaryTreeNode<T extends Comparable<T>> {
             } else {
                 this.getParent().setRightChild(null);
             }
-            // call to maintain here
+
+            this.getParent().maintain();
         }
         return this;
     }
@@ -286,7 +302,6 @@ public class BinaryTreeNode<T extends Comparable<T>> {
 
         left.setRightChild(this);
         this.setParent(left);
-
 
     }
 
@@ -330,10 +345,32 @@ public class BinaryTreeNode<T extends Comparable<T>> {
             this.getLeftChild().getHeight(), 
             this.getRightChild().getHeight()
         );
+
+        if (this.getLeftChild() != null) {
+            this.size += this.getLeftChild().getSize();
+        }
+        if (this.getRightChild() != null) {
+            this.size += this.getRightChild().getSize();
+        }
     }
 
-    private int skew() {
-        return this.getRightChild().getHeight() - this.getLeftChild().getHeight();
+    public int skew() {
+        // kinda messy but
+        int rightHeight;
+        int leftHeight;
+
+        if (this.getRightChild() != null) {
+            rightHeight = this.getRightChild().getHeight();
+        } else {
+            rightHeight = 0;
+        }
+
+        if (this.getLeftChild() != null) {
+            leftHeight = this.getLeftChild().getHeight();
+        } else {
+            leftHeight = 0;
+        }
+        return rightHeight - leftHeight;
     }
 
     private void maintain() {
@@ -345,7 +382,17 @@ public class BinaryTreeNode<T extends Comparable<T>> {
     }
 
     private void rebalance() {
-
+        if (this.skew() == 2) {
+            if (this.getRightChild() != null && this.getRightChild().skew() < 0) {
+                this.getRightChild().subtreeRotateRight();
+            }
+            this.subtreeRotateLeft();
+        } else if (this.skew() == -2) {
+            if (this.getLeftChild() != null && this.getLeftChild().skew() > 0) {
+                this.getLeftChild().subtreeRotateLeft();
+            }
+            this.subtreeRotateRight();
+        }
     }
 
     // META
