@@ -287,6 +287,25 @@ public class TestBinaryTreeNode {
     }
 
     @Test
+    public void testBinaryTreeRotateRightOnRoot() {
+        Integer[] testArray = new Integer[]{4, 3, 2, 6, 11, 18, 19, 22, 9, 14, 17, 20, 12};
+        BinaryTreeNode<Integer> root = new BinaryTreeNode<>(Integer.class, 7);
+
+        for (Integer i : testArray) {
+            BinaryTreeNode<Integer> value = new BinaryTreeNode<>(Integer.class, i);
+            this.binaryTreeInsert(root, value);
+        }
+
+        System.out.println(root);
+        root.subtreeRotateRight();
+        System.out.println(root.getParent());
+
+        BinaryTreeNode<Integer> newTarget = root.getParent();
+        assertEquals(null, newTarget.getParent());
+        assertEquals(root, newTarget.getRightChild());
+    }
+
+    @Test
     public void testBinaryTreeBalancing() {
         Integer[] testArray = new Integer[]{4, 3, 2, 6, 11, 18, 19, 22, 9, 14, 17, 20, 12};
         BinaryTreeNode<Integer> root = new BinaryTreeNode<>(Integer.class, 7);
@@ -297,9 +316,7 @@ public class TestBinaryTreeNode {
         }
         
         System.out.println(root);
-
     }
-
 
     private void binaryTreeInsert(BinaryTreeNode<Integer> root, BinaryTreeNode<Integer> item) {
         Integer val1 = root.getItem();

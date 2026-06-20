@@ -296,7 +296,7 @@ public class BinaryTreeNode<T extends Comparable<T>> {
 
         if (currentParent != null && currentParent.getLeftChild().equals(this)) {
             this.getParent().setLeftChild(left);
-        } else {
+        } else if (currentParent != null && currentParent.getRightChild().equals(this)) {
             this.getParent().setRightChild(left);
         }
 
