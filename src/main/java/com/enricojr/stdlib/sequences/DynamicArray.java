@@ -104,7 +104,7 @@ public class DynamicArray<T> implements
      */
     @Override
     public T getAt(int x) {
-        if (x > this.itemCount - 1) {
+        if (x > this.itemCount - 1 || x < 0) {
             throw new ArrayIndexOutOfBoundsException();
         }
         return this.internal.getAt(x);
@@ -114,14 +114,14 @@ public class DynamicArray<T> implements
      * Returns the item at the first position in the array.
      */
     public T getFirst() {
-        return this.internal.getAt(0);
+        return this.getAt(0);
     }
 
     /**
      * Returns the item at the last position in the array.
      */
     public T getLast() {
-        return this.internal.getAt(this.itemCount);
+        return this.getAt(this.itemCount - 1);
     }
 
     /**
@@ -160,8 +160,8 @@ public class DynamicArray<T> implements
      */
     @Override
     public void insertLast(T item) {
-        // TODO: Double check this, it might be wrong.
-        this.insertAt(this.itemCount, item);
+        this.internal.setAt(this.itemCount, item);
+        this.itemCount += 1;
     }
 
     /**

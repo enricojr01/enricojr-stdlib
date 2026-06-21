@@ -149,12 +149,26 @@ public class TestDynamicArray {
             Integer.class, new Integer[]{1, 2, 3, 4}
         );
 
+
         dai1.insertLast(25);
+        dai1.insertLast(26);
         dai1.insertLast(27);
-        dai1.insertLast(29);
 
+        assertEquals(7, dai1.len());
+        assertEquals(27, dai1.getLast());
+    }
 
-        System.out.println(dai1);
+    @Test
+    public void testDynamicArrayInsertFirst() {
+        DynamicArray<Integer> dai1 = new DynamicArray<>(
+            Integer.class, new Integer[]{1, 2, 3, 4}
+        );
+
+        dai1.insertFirst(25);
+        dai1.insertFirst(27);
+
+        assertEquals(6, dai1.len());
+        assertEquals(27, dai1.getFirst());
     }
 
 }
