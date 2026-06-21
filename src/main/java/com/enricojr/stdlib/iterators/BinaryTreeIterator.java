@@ -2,22 +2,22 @@ package com.enricojr.stdlib.iterators;
 
 import java.util.Iterator;
 import com.enricojr.stdlib.sequences.DynamicArray;
+import com.enricojr.stdlib.sequences.Stack;
 import com.enricojr.stdlib.sets.BinaryTreeNode;
 
 public class BinaryTreeIterator<T extends Comparable<T>> implements Iterator<T> {
     private BinaryTreeNode<T> start;
-    private DynamicArray<T> stack;
-    private int pointer;
+    private Stack<T> stack;
 
     public BinaryTreeIterator(Class<T> type, BinaryTreeNode<T> start) {
         this.start = start;
-        this.stack = new DynamicArray<>(type);
+        this.stack = new Stack<>(type);
         this.walk(this.start);
     }
 
     @Override
     public boolean hasNext() {
-        if (this.pointer < this.stack.len()) {
+        if (this.stack.len() > 0) {
             return true;
         }
         return false;
@@ -25,9 +25,7 @@ public class BinaryTreeIterator<T extends Comparable<T>> implements Iterator<T> 
 
     @Override
     public T next() {
-        T item = this.stack.getAt(this.pointer);
-        this.pointer += 1;
-        return item;
+        return this.stack.pop();
     }
 
     private void walk(BinaryTreeNode<T> start) {
@@ -35,7 +33,7 @@ public class BinaryTreeIterator<T extends Comparable<T>> implements Iterator<T> 
             this.walk(start.getLeftChild());
         }
 
-        this.stack.insertLast(start.getItem());
+        this.stack.push(start.getItem());
 
         if (start.getRightChild() != null) {
             this.walk(start.getRightChild());
