@@ -4,7 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.Test;
+import com.enricojr.stdlib.iterators.BinaryTreeIterator;
 import com.enricojr.stdlib.sets.BinaryTreeNode;
 
 public class TestBinaryTreeNode {
@@ -234,14 +236,26 @@ public class TestBinaryTreeNode {
             this.binaryTreeInsert(root, value);
         }
 
-        System.out.println(root);
         BinaryTreeNode<Integer> target = root.subtreeFind(11);
         target.subtreeRotateLeft();
-        System.out.println(root);
 
+        // check that the pointers are right
         BinaryTreeNode<Integer> newTarget = root.subtreeFind(18);
         assertEquals(root, newTarget.getParent());
         assertEquals(target, newTarget.getLeftChild());
+        System.out.println(root);
+
+        // check that traversal order is correct;
+        BinaryTreeIterator<Integer> iterator = new BinaryTreeIterator<>(Integer.class, root);
+        Integer previous = 0;
+        while (iterator.hasNext()) {
+            Integer next = iterator.next();
+            System.out.print(next + ", ");
+            if (next < previous) {
+                fail();
+            }
+            previous = next;
+        }
     }
 
     @Test
@@ -316,7 +330,7 @@ public class TestBinaryTreeNode {
 
         for (Integer i : testArray) {
             BinaryTreeNode<Integer> value = new BinaryTreeNode<>(Integer.class, i);
-            this.binaryTreeInsert(root, value);
+            this.binaryTreeInsertMaintain(root, value);
         }
         
         System.out.println(root);
@@ -340,6 +354,26 @@ public class TestBinaryTreeNode {
                 this.binaryTreeInsert(root.getRightChild(), item);
             } else {
                 root.subtreeInsertAfter(item);
+            }
+        }
+    }
+
+    private void binaryTreeInsertMaintain(BinaryTreeNode<Integer> root, BinaryTreeNode<Integer> item) {
+        Integer val1 = root.getItem();
+        Integer val2 = item.getItem();
+        if (val2.compareTo(val1) < 0) {
+            if (root.getLeftChild() != null) {
+                this.binaryTreeInsert(root.getLeftChild(), item);
+            } else {
+                root.subtreeInsertBefore(item);
+                root.maintain();
+            }
+        } else {
+            if (root.getRightChild() != null) {
+                this.binaryTreeInsert(root.getRightChild(), item);
+            } else {
+                root.subtreeInsertAfter(item);
+                root.maintain();
             }
         }
     }

@@ -143,4 +143,18 @@ public class TestDynamicArray {
         assertFalse(dai1.equals(testStr));
     }
 
+    @Test
+    public void testDynamicArrayInsertLast() {
+        DynamicArray<Integer> dai1 = new DynamicArray<>(
+            Integer.class, new Integer[]{1, 2, 3, 4}
+        );
+
+        dai1.insertLast(25);
+        dai1.insertLast(27);
+        dai1.insertLast(29);
+
+
+        System.out.println(dai1);
+    }
+
 }

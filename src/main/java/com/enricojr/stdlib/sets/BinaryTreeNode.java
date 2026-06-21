@@ -379,7 +379,7 @@ public class BinaryTreeNode<T extends Comparable<T>> {
         return rightHeight - leftHeight;
     }
 
-    private void maintain() {
+    public void maintain() {
         this.rebalance();
         this.subtreeUpdate();
         if (this.getParent() != null) {
