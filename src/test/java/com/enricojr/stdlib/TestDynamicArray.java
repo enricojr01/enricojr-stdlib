@@ -171,4 +171,25 @@ public class TestDynamicArray {
         assertEquals(27, dai1.getFirst());
     }
 
+    @Test
+    public void testDynamicArrayDeleteFirst() {
+        DynamicArray<Integer> dai1 = new DynamicArray<>(
+            Integer.class, new Integer[]{1, 2, 3, 4}
+        );
+        dai1.deleteFirst();
+        System.out.println(dai1);
+        assertEquals(3, dai1.len());
+        assertEquals(2, dai1.getFirst());
+    }
+
+    @Test
+    public void testDynamicArrayDeleteLast() {
+        DynamicArray<Integer> dai1 = new DynamicArray<>(
+            Integer.class, new Integer[]{1, 2, 3, 4}
+        );
+        dai1.deleteLast();
+        System.out.println(dai1);
+        assertEquals(3, dai1.len());
+        assertEquals(3, dai1.getLast());
+    }
 }
