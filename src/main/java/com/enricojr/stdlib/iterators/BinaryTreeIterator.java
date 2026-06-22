@@ -7,17 +7,18 @@ import com.enricojr.stdlib.sets.BinaryTreeNode;
 
 public class BinaryTreeIterator<T extends Comparable<T>> implements Iterator<T> {
     private BinaryTreeNode<T> start;
-    private Stack<T> stack;
+    private DynamicArray<T> internal;
+    private int index = 0;
 
     public BinaryTreeIterator(Class<T> type, BinaryTreeNode<T> start) {
         this.start = start;
-        this.stack = new Stack<>(type);
+        this.internal = new DynamicArray<>(type);
         this.walk(this.start);
     }
 
     @Override
     public boolean hasNext() {
-        if (this.stack.len() > 0) {
+        if (this.index <= this.internal.len() - 1) {
             return true;
         }
         return false;
@@ -25,7 +26,9 @@ public class BinaryTreeIterator<T extends Comparable<T>> implements Iterator<T> 
 
     @Override
     public T next() {
-        return this.stack.pop();
+        T item = this.internal.getAt(this.index);
+        this.index += 1;
+        return item;
     }
 
     private void walk(BinaryTreeNode<T> start) {
@@ -33,7 +36,7 @@ public class BinaryTreeIterator<T extends Comparable<T>> implements Iterator<T> 
             this.walk(start.getLeftChild());
         }
 
-        this.stack.push(start.getItem());
+        this.internal.insertLast(start.getItem());
 
         if (start.getRightChild() != null) {
             this.walk(start.getRightChild());

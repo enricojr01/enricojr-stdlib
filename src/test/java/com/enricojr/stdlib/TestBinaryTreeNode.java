@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+import javax.naming.BinaryRefAddr;
 import org.junit.jupiter.api.Test;
 import com.enricojr.stdlib.iterators.BinaryTreeIterator;
 import com.enricojr.stdlib.sets.BinaryTreeNode;
@@ -243,15 +244,13 @@ public class TestBinaryTreeNode {
         BinaryTreeNode<Integer> newTarget = root.subtreeFind(18);
         assertEquals(root, newTarget.getParent());
         assertEquals(target, newTarget.getLeftChild());
-        System.out.println(root);
 
         // check that traversal order is correct;
         BinaryTreeIterator<Integer> iterator = new BinaryTreeIterator<>(Integer.class, root);
         Integer previous = 0;
         while (iterator.hasNext()) {
             Integer next = iterator.next();
-            System.out.print(next + ", ");
-            if (next < previous) {
+            if (previous > next) {
                 fail();
             }
             previous = next;
@@ -278,6 +277,16 @@ public class TestBinaryTreeNode {
         BinaryTreeNode<Integer> newTarget = root.getParent();
         assertEquals(null, newTarget.getParent());
         assertEquals(root, newTarget.getLeftChild());
+
+        BinaryTreeIterator<Integer> iterator = new BinaryTreeIterator<>(Integer.class, root);
+        Integer previous = 0;
+        while (iterator.hasNext()) {
+            Integer next = iterator.next();
+            if (previous > next) {
+                fail();
+            }
+            previous = next;
+        }
     }
 
     @Test
