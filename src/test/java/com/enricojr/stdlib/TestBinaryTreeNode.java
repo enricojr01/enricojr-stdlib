@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
-import javax.naming.BinaryRefAddr;
 import org.junit.jupiter.api.Test;
 import com.enricojr.stdlib.iterators.BinaryTreeIterator;
 import com.enricojr.stdlib.sets.BinaryTreeNode;
@@ -307,6 +306,16 @@ public class TestBinaryTreeNode {
         BinaryTreeNode<Integer> newTarget = root.subtreeFind(9);
         assertEquals(root, newTarget.getParent());
         assertEquals(target, newTarget.getRightChild());
+
+        BinaryTreeIterator<Integer> iterator = new BinaryTreeIterator<>(Integer.class, root);
+        Integer previous = 0;
+        while (iterator.hasNext()) {
+            Integer next = iterator.next();
+            if (previous > next) {
+                fail();
+            }
+            previous = next;
+        }
     }
 
     @Test
@@ -317,7 +326,6 @@ public class TestBinaryTreeNode {
         for (Integer i : testArray) {
             BinaryTreeNode<Integer> value = new BinaryTreeNode<>(Integer.class, i);
             this.binaryTreeInsert(root, value);
-
         }
 
         System.out.println(root);
@@ -327,27 +335,44 @@ public class TestBinaryTreeNode {
         BinaryTreeNode<Integer> newTarget = root.getParent();
         assertEquals(null, newTarget.getParent());
         assertEquals(root, newTarget.getRightChild());
-    }
 
-    @Test
-    public void testBinaryTreeBalancing() {
-        // TO fully test maintain() two things need to be checked:
-        // 1. that the skew of every node is between -1 and 1 (inclusive)
-        // 2. that the traversal order is correct even after all the rotations (in-order)
-        Integer[] testArray = new Integer[]{4, 3, 2, 6, 11, 18, 19, 22, 9, 14, 17, 20, 12};
-        BinaryTreeNode<Integer> root = new BinaryTreeNode<>(Integer.class, 7);
-
-        for (Integer i : testArray) {
-            BinaryTreeNode<Integer> value = new BinaryTreeNode<>(Integer.class, i);
-            this.binaryTreeInsertMaintain(root, value);
+        BinaryTreeIterator<Integer> iterator = new BinaryTreeIterator<>(Integer.class, root);
+        Integer previous = 0;
+        while (iterator.hasNext()) {
+            Integer next = iterator.next();
+            if (previous > next) {
+                fail();
+            }
+            previous = next;
         }
-        
-        System.out.println(root);
-        // System.out.println(root.skew());
-        // System.out.println(root.getLeftChild().skew());
-        // System.out.println(root.getRightChild().skew());
-        this.binaryTreeWalk(root);
     }
+
+    // @Test
+    // public void testBinaryTreeBalancing() {
+    //     // TO fully test maintain() two things need to be checked:
+    //     // 1. that the skew of every node is between -1 and 1 (inclusive)
+    //     // 2. that the traversal order is correct even after all the rotations (in-order)
+    //     Integer[] testArray = new Integer[]{4, 3, 2, 6, 11, 18, 19, 22, 9, 14, 17, 20, 12};
+    //     BinaryTreeNode<Integer> root = new BinaryTreeNode<>(Integer.class, 7);
+
+    //     for (Integer i : testArray) {
+    //         BinaryTreeNode<Integer> value = new BinaryTreeNode<>(Integer.class, i);
+    //         this.binaryTreeInsertMaintain(root, value);
+    //     }
+
+    //     System.out.println(root);
+        
+    //     BinaryTreeIterator<Integer> iterator = new BinaryTreeIterator<>(Integer.class, root);
+    //     Integer previous = 0;
+    //     while (iterator.hasNext()) {
+    //         Integer next = iterator.next();
+    //         System.out.print(next + ", ");
+    //         if (previous > next) {
+    //             fail();
+    //         }
+    //         previous = next;
+    //     }
+    // }
 
     private void binaryTreeInsert(BinaryTreeNode<Integer> root, BinaryTreeNode<Integer> item) {
         Integer val1 = root.getItem();

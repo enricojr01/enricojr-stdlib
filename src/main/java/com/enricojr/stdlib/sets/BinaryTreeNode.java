@@ -224,7 +224,6 @@ public class BinaryTreeNode<T extends Comparable<T>> {
             item.setParent(this);
             this.setLeftChild(item);
         }
-        // this.maintain();
     }
 
     /**
@@ -241,7 +240,6 @@ public class BinaryTreeNode<T extends Comparable<T>> {
             item.setParent(this);
             this.setRightChild(item);
         }
-        // this.maintain();
     }
 
 
@@ -352,6 +350,7 @@ public class BinaryTreeNode<T extends Comparable<T>> {
 
         this.height = 1 + Math.max(leftHeight, rightHeight);
 
+        this.setSize(1);
         if (this.getLeftChild() != null) {
             this.size += this.getLeftChild().getSize();
         }
@@ -391,13 +390,15 @@ public class BinaryTreeNode<T extends Comparable<T>> {
         if (this.skew() == 2) {
             if (this.getRightChild() != null && this.getRightChild().skew() < 0) {
                 this.getRightChild().subtreeRotateRight();
+            } else {
+                this.subtreeRotateLeft();
             }
-            this.subtreeRotateLeft();
         } else if (this.skew() == -2) {
             if (this.getLeftChild() != null && this.getLeftChild().skew() > 0) {
                 this.getLeftChild().subtreeRotateLeft();
+            } else {
+                this.subtreeRotateRight();
             }
-            this.subtreeRotateRight();
         }
     }
 
@@ -436,7 +437,7 @@ public class BinaryTreeNode<T extends Comparable<T>> {
 
     private void print(StringBuilder buffer, String prefix, String childrenPrefix) {
         buffer.append(prefix);
-        buffer.append(this.getItem());
+        buffer.append(this.getItem() + "(" + this.skew() + ")" + "(" + this.getHeight() + ")");
         buffer.append("\n");
 
         if (this.getLeftChild() != null) {

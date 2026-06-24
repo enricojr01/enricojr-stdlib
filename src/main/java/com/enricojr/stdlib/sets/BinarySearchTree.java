@@ -25,6 +25,7 @@ public class BinarySearchTree<T extends Comparable<T>> implements SetInterface<T
 
         // NOTE: Step 1 - find the mean of the array
         // TODO: this could be better optimized, maybe consider adding a sorter to the base array
+        // TODO: rotations can change the root and I need a way to keep track of those changes.
         StaticArray<T> temp = new StaticArray<>(type, items);
         InsertionSorter<T> is = new InsertionSorter<>(items);
         is.sort();
@@ -131,12 +132,14 @@ public class BinarySearchTree<T extends Comparable<T>> implements SetInterface<T
                 this.treeInsert(root.getLeftChild(), newNode);
             } else {
                 start.subtreeInsertBefore(newNode);
+                start.maintain();
             }
         } else {
             if (start.getRightChild() != null) {
                 this.treeInsert(start.getRightChild(), newNode);
             } else {
                 start.subtreeInsertAfter(newNode);
+                start.maintain();
             }
         }
     }
